@@ -1,0 +1,233 @@
+\documentclass[english,listof=totoc]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{mathtools}
+
+\title{Estimation of Matrix-t distributions with Expectation
+Maximization}
+
+
+\author{Zahari Kassabov\thanks{TIF-UNIMI-2016-5}\\
+        Dipartimento di Fisica, Universit\`a di Torino and INFN, Sezione di Torino\\
+		TIF Lab, Dipartimento di Fisica, Universit\`a di Milano\\
+        E-mail: \email{kassabov@to.infn.it}}
+
+\begin{document}
+
+\begin{abstract}
+We derive the expectation-maximization (EM) formulae for
+Matrix-$t$ distributions and discuss their practical implementation.
+\end{abstract}
+
+\paragraph{Introduction}
+Matrix-$t$ distributions have been applied to several predictive
+problems, such as spatial interpolation applied to the prediction of
+pollution concentration, or recommendation systems \cite{NIPS2007_3203}???
+...
+
+\paragraph{Derivation}
+
+Most of the results are based on the integral
+
+\begin{equation}
+\int_{S>0}e^{-\textrm{tr}SA}(\det S)^{x}dS=\Gamma_{p}\left(\frac{1}{2}(1+p+2x)\right)(\det A)^{\frac{1}{2}(1+p+2x)}\label{eq:intmultgammadef}
+\end{equation}
+where we integrate $S$ over the space of positive definite $p\times p$
+matrices, $A$ is a $p\times p$ nonsingular matrix, and the multivariate
+gamma function $\Gamma_{p}(a)$ is given in terms of the standard
+gamma function by:
+\begin{equation}
+\Gamma_{p}(a)=\pi^{p(p-1)/4}\prod_{j=1}^{p}\Gamma\left(a+(1-j)/2\right)\label{eq:multgammadef}
+\end{equation}
+we also define the multivariate digamma function
+\[
+\psi_{p}(a)=\frac{\partial}{\partial a}\log\Gamma_{p}(a)=\sum_{j=1}^{p}\psi(a+(1-j)/2)
+\]
+
+The PDF of a random matrix $p\times m$ $T$ following a matrix-t
+distribution
+\[
+T_{p,m}(M,\Sigma,\Omega,n)
+\]
+is given by:
+\begin{equation}
+\begin{split}\textrm{tpdf}(T,M,\Sigma,\Omega,n)=\frac{\Gamma_{p}\left(\frac{p+n+m-1}{2}\right)}{\Gamma_{p}\left(\frac{n+p-1}{2}\right)\pi^{\frac{mp}{2}}(\det\Omega)^{\frac{p}{2}}(\det\Sigma)^{\frac{m}{2}}}\times\\
+\det\left(I_{p\times p}+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}}\right){}^{\frac{1-m-p-n}{2}}
+\end{split}
+\label{eq:matrixtpdf}
+\end{equation}
+where $\Sigma$ is a $p\times p$ positive definite matrix, $\Omega$
+is a $m\times m$ positive definite matrix, $M$ is a $p\times m$
+matrix, and $n$ is the number of degrees of freedom.
+
+Following {[}book{]}, we begin by deriving the PDF of the matrix-t,
+starting from a matrix normal distributed random matrix $X$, where
+row-covariance matrix $S$ is distributed following a Wishart distribution
+with the appropriate count of degrees of freedom (independent from
+$X$), and marginalizing over $S$. We repeat the results from {[}book{]}
+because, along the way, we will write several results that will be
+useful in the derivation of the EM formulas.
+
+The $p\times m$ random matrix $X$ follows the matrix-normal distribution
+
+\begin{equation}
+N_{p,m}(M,S,\Omega)\label{eq:ndist}
+\end{equation}
+if its PDF is given by:
+\begin{equation}
+\frac{1}{(2\pi)^{pm/2}(\det\Omega)^{p/2}(\det S)^{m/2}}\exp\left(-\frac{1}{2}\textrm{tr}\left[\Omega^{-1}(X-M)^{\textrm{t}}S^{-1}(X-M)\right]\right)\label{eq:ndistpdf}
+\end{equation}
+where $S$ is a $p\times p$ positive definite matrix (the covariance
+of the rows of $X$), $\Omega$ is a $m\times m$ positive definite
+matrix (the covariance of the columns of $X$) and $M$ is a $p\times m$
+matrix (the mean of $X$).
+
+In turn, the $p\times p$ matrix $S$ follows a Wishart distribution
+\begin{equation}
+W_{p}\left(\Sigma,\nu\right)\label{eq:wdist}
+\end{equation}
+ if its PDF is given by:
+\begin{equation}
+\frac{1}{2^{\nu p/2}(\det\Sigma)^{\nu/2}\Gamma_{p}(\frac{\nu}{2})}(\det S)^{\frac{\nu-p-1}{2}}\exp\left(-\textrm{tr}(\Sigma^{-1}S)\right)\label{eq:wdistpdf}
+\end{equation}
+where $\Sigma$ is a $p\times p$ positive definite matrix, $\nu>p-1$
+is the degrees of freedom and $\Gamma_{p}$ is the multivariate gamma
+function defined in \ref{eq:multgammadef}. We will show that the
+random matrix
+\begin{equation}
+T=(S^{-\frac{1}{2}})^{t}X+M\label{eq:change}
+\end{equation}
+where $S^{\frac{1}{2}}$ is the Cholesky square root of $S$, follows
+a matrix-$t$ distribution with $n=\nu-p+1$. The Jacobian of this
+transformation is 
+\begin{equation}
+(\det S)^{\frac{1}{2}m}.\label{eq:jac}
+\end{equation}
+
+The joint PDF of $T$ and $S$ is the product of Eq.~\ref{eq:ndistpdf},
+Eq.~\ref{eq:wdistpdf} and Eq.~\ref{eq:jac}:
+\begin{equation}
+\begin{split}j(T,S,M,\Sigma,\Omega,n)\coloneqq\frac{\pi^{-\frac{mp}{2}}(\det\Sigma)^{\frac{n+p-1}{2}}(\det\Omega)^{\frac{n+m-2}{2}}(\det S)^{\frac{m+n-2}{2}}}{2^{p\frac{n+m+p-1}{2}}\Gamma_{p}(\frac{n+p-1}{2})}\times\\
+\exp\left(-\frac{1}{2}\textrm{tr}S(\Sigma+(T-M)\Omega^{-1}(T-M)^{\textrm{t}})\right)
+\end{split}
+\label{eq:jointpdf}
+\end{equation}
+Finally we obtain the PDF of the matrix-$t$ distribution Eq.~\ref{eq:matrixtpdf}
+by integrating over $S$ in the above expression, using directly Eq.~\ref{eq:intmultgammadef}
+and slightly rearranging the terms (in particular, noting that $\det(\Sigma+(T-M)\Omega^{-1}(T-M)^{\textrm{t}})=\det\Sigma\det(I_{p\times p}+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}})$).
+
+\subsection{Calculating the Expectation-maximization steps}
+
+The expectation maximization formalism entails calculating 
+\begin{equation}
+E=\sum_{i}^{N}\frac{\int_{S>0}j(T_{i},S,M,\Sigma,\Omega,n)\log j(T_{i},S,M_{t},\Sigma_{t},\Omega_{t},n_{t})dS}{\textrm{tpdf}(T,M,\Sigma,\Omega,n)}\label{eq:expdef}
+\end{equation}
+where $\{T_{1}...T_{N}\}$ is an input set of data from which we wish
+to estimate the maximum likelihood parameters of the distribution.
+We omit writing explicitly the dependence of $E$ on all the parameters,
+i.e. $E\equiv E(T_{i},S,M,\Sigma,\Omega,n,M_{t},\Sigma_{t},\Omega_{t},n_{t})$.
+The values of the new guesses are found by computing the maximum with
+respect to the parameters $\{M_{t},\Sigma_{t},\Omega_{t},n_{t}\}$. 
+
+We can split the integral in Eq.~\ref{eq:expdef} by the terms of
+$\log j(T_{i},S,M_{t},\Sigma_{t},\Omega_{t},n_{t})$. Eliminating
+a global factor $\frac{1}{2}$ and terms that do not depend on the
+maximization parameters $\{M_{t},\Sigma_{t},\Omega_{t},n_{t}\}$,
+we have: 
+\[
+\begin{split}\log j(T_{i},S,M_{t},\Sigma_{t},\Omega_{t},n_{t})\sim n_{t}\log\det S+\textrm{tr}(S(\Sigma_{t}+(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}))\\
+-n_{t}p\log2-p\log\det\Omega_{t}+(n_{t}+p-1)\log\det\Sigma_{t}-2\log\Gamma_{p}(\frac{1}{2}(n_{t}+p-1))
+\end{split}
+\]
+where the first two terms depend on $S$, and therefore we need to
+compute the corresponding integral, while for the rest, the integral
+is proportional to the PDF of the matrix-$t$ distribution, Eq.~\ref{eq:matrixtpdf}.
+In obtain to compute:
+\begin{equation}
+n_{t}\int_{S>0}j(T_{i},S,M,\Sigma,\Omega,n)\log\det SdS\label{eq:firstlogpart}
+\end{equation}
+we note that taking the derivative with respect to $x$ in Eq.~\ref{eq:intmultgammadef},
+we have:
+\begin{equation}
+\int_{S>0}e^{-\textrm{tr}SA}(\det S)^{x}\log\det SdS=\Gamma_{p}\left(\frac{1}{2}(1+p+2x)\right)(\det A)^{\frac{1}{2}(1+p+2x)}(\log\det A+\gamma_{p}(\frac{1}{2}(1+p+2x)))\label{eq:intderivative}
+\end{equation}
+We can solve \ref{eq:firstlogpart} by substituting this result directly.
+
+In order to compute the second nontrivial log term,
+\[
+\int_{S>0}j(T_{i},S,M,\Sigma,\Omega,n)\textrm{tr}(S(\Sigma_{t}+(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}))dS
+\]
+we note that, due to the linearity of the trace, the result is equivalent
+to solving a matrix valued integral
+\[
+\textrm{tr}\left[\left(\int_{S>0}j(T_{i},S,M,\Sigma,\Omega,n)SdS\right)(\Sigma_{t}+(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}})\right]\,.
+\]
+The enclosed integral also follows from Eq.~\ref{eq:intmultgammadef},
+after taking the matrix derivative with respect to $A$. Using, for
+symmetric $S$
+\begin{equation}
+\frac{d}{dA}\det A=(\det A)A^{-1}\label{eq:detderivative}
+\end{equation}
+and
+\[
+\frac{d}{dA}e^{\textrm{tr}SA}=(e^{\textrm{trS}A})S
+\]
+we have 
+\[
+\int_{S>0}e^{-\textrm{tr}SA}(\det S)^{x}SdS=-\frac{1}{2}(1+p+2x)\Gamma_{p}\left(\frac{1}{2}(1+p+2x)\right)(\det A)^{\frac{1}{2}(p+2x-1)}A^{-1}
+\]
+from where again, we can obtain the result by direct substitution.
+
+Combining results of the two integrals together, and with adequate
+rearrangements we obtain the integrated form of Eq.~\ref{eq:expdef}:
+\begin{equation}
+\begin{split}E=\sum_{i}^{N}n_{t}\psi_{p}\left(\frac{1}{2}(m+n+p-1)\right)-2\log\Gamma_{p}\left(\frac{1}{2}(n_{t}+p-1)\right)+p\log\det\Omega_{t}^{-1}\\
+-n_{t}\log\det\left((T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}+\Sigma\right)+(n_{t}+p-1)\log\det\Sigma_{t}\\
+-(m+n+p-1)\textrm{tr}\left(\left((T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}+\Sigma\right)^{-1}\left((T_{i}-M_{t})\Omega_{t}^{-1}(T_{i}-M_{t})^{\textrm{t}}+\Sigma_{t}\right)\right)
+\end{split}
+\label{eq:fsimp}
+\end{equation}
+The maximization formulas are obtained setting the derivatives of
+this equation to zero.
+
+For $M_{t}$ we have:
+\[
+\frac{dE}{dM_{t}}=0\Rightarrow\sum_{i}^{N}\left((T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}+\Sigma\right)^{-1}\left(T_{i}-M_{t}\right)\Omega_{t}^{-1}=0
+\]
+and because $\Omega_{t}$ is nonsingular, we can obtain $M_{t}$ as
+a weighted average of the input data:
+\[
+M_{t}=\frac{1}{N}\sum_{i}^{N}\left((T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}+\Sigma\right)^{-1}T_{i}=\frac{1}{N}\sum_{i}^{N}W_{i}T_{i}
+\]
+where we have defined the weight matrices $W_{i}$ as
+\[
+W_{i}=\left((T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}+\Sigma\right)^{-1}
+\]
+
+$\Sigma_{t}$ is given in terms of the inverse of the mean weight
+by:
+\[
+\Sigma_{t}=\frac{n_{t}+p-1}{n+m+p-1}\left[\frac{1}{N}\sum_{i}^{N}W_{i}\right]^{-1}
+\]
+Note that it depends on $n_{t}$.
+
+For $\Omega_{t}$ we obtain:
+\[
+\Omega_{t}=\frac{n+p+m-1}{p}\frac{1}{N}\sum_{i}^{N}(T_{i}-M_{t})W_{i}(T_{i}-M_{t})
+\]
+and for $n_{t}$, in the case where $\Sigma_{t}$ is a free parameter
+that needs to be estimated we have:
+\[
+-p\log(m+n+p-1)+p\log(n_{t}+p-1)+\frac{1}{N}\sum_{i}^{N}\log\det W_{i}-\log\det\left(\frac{1}{N}\sum_{i}^{N}W_{i}\right)+\psi_{p}(\frac{1}{2}(m+n+p-1))-\psi_{p}(\frac{1}{2}(n_{t}+p-1))=0
+\]
+otherwise if $\Sigma_{t}=\Sigma$ is fixed and does not depend on
+$n_{t}$:
+\[
+\log\det\Sigma_{t}-\log\det\left(\frac{1}{N}\sum_{i}^{N}W_{i}\right)+\psi_{p}(\frac{1}{2}(m+n+p-1))-\psi_{p}(\frac{1}{2}(n_{t}+p-1))=0
+\]
+
+\bibliography{references}
+\end{document}
