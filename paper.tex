@@ -6,26 +6,30 @@
 \usepackage{amsthm}
 \usepackage{mathtools}
 
-\title{Estimation of Matrix-t distributions with Expectation
-Maximization}
+\title{ML Estimation of Matrix t Distributions with Expectation Maximization}
 
 
 \author{Zahari Kassabov\thanks{TIF-UNIMI-2016-5}\\
         Dipartimento di Fisica, Universit\`a di Torino and INFN, Sezione di Torino\\
 		TIF Lab, Dipartimento di Fisica, Universit\`a di Milano\\
-        E-mail: \email{kassabov@to.infn.it}}
+        E-mail: \email{kassabov@to.infn.it}\\
+        \\
+        Hsien-Ching Kao\\
+        Wolfram Research, Inc.\\
+		Champaign, Illinois 61820, USA\\
+		E-mail: \email{sp000088@gmail.com}
+		}
 
 \begin{document}
 
+\maketitle
+
 \begin{abstract}
-We derive the expectation-maximization (EM) formulae for
-Matrix-$t$ distributions and discuss their practical implementation.
+Matrix-$t$ distribution has applications in various areas of applied statistics, including recommendation systems, remote sensing, etc. In this article we provide an expectation-maximization (EM) formulae for Matrix-$t$ distributions and discuss their practical implementation.
 \end{abstract}
 
 \paragraph{Introduction}
-Matrix-$t$ distributions have been applied to several predictive
-problems, such as spatial interpolation applied to the prediction of
-pollution concentration, or recommendation systems \cite{NIPS2007_3203}???
+Matrix-$t$ distributions have been applied to several predictive problems, such as spatial interpolation applied to the prediction of pollution concentration \cite{}, recommendation systems \cite{NIPS2007_3203},
 ...
 
 \paragraph{Derivation}
@@ -33,7 +37,7 @@ pollution concentration, or recommendation systems \cite{NIPS2007_3203}???
 Most of the results are based on the integral
 
 \begin{equation}
-\int_{S>0}e^{-\textrm{tr}SA}(\det S)^{x}dS=\Gamma_{p}\left(\frac{1}{2}(1+p+2x)\right)(\det A)^{\frac{1}{2}(1+p+2x)}\label{eq:intmultgammadef}
+\int_{S\succ 0}e^{-\textrm{tr}SA}(\det S)^{x}dS=\Gamma_{p}\left(\frac{1}{2}(1+p+2x)\right)(\det A)^{\frac{1}{2}(1+p+2x)}\label{eq:intmultgammadef}
 \end{equation}
 where we integrate $S$ over the space of positive definite $p\times p$
 matrices, $A$ is a $p\times p$ nonsingular matrix, and the multivariate
