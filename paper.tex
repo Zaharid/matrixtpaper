@@ -25,62 +25,42 @@
 \maketitle
 
 \begin{abstract}
-Matrix-$t$ distribution has applications in various areas of applied statistics, including recommendation systems, remote sensing, etc. In this article we provide an expectation-maximization (EM) formulae for Matrix-$t$ distributions and discuss their practical implementation.
+Matrix--$t$ distribution has applications in various areas of applied statistics, including recommendation systems, remote sensing, etc. In this article we provide an expectation-maximization (EM) formulae for the maximum likelihood estimation of matrix--$t$ distributions and discuss their practical implementation.
 \end{abstract}
 
 \paragraph{Introduction}
-Matrix-$t$ distributions have been applied to several predictive problems, such as spatial interpolation applied to the prediction of pollution concentration \cite{}, recommendation systems \cite{NIPS2007_3203},
+Matrix--$t$ distributions have been applied to several predictive problems, such as spatial interpolation applied to the prediction of pollution concentration \cite{}, recommendation systems \cite{NIPS2007_3203}, and
 ...
 
 \paragraph{Derivation}
 
-Most of the results are based on the integral
+The derivation of EM formulae for matrix--$t$ distributions is mainly based on the following integral identity:
 
 \begin{equation}
-\int_{S\succ 0}e^{-\textrm{tr}SA}(\det S)^{x}dS=\Gamma_{p}\left(\frac{1}{2}(1+p+2x)\right)(\det A)^{\frac{1}{2}(1+p+2x)}\label{eq:intmultgammadef}
+\int_{S\succ 0}e^{-\textrm{tr}(SA)}|S|^{x}dS=\Gamma_{p}\left(\frac{1+p+2x}{2}\right)|A|^{\frac{1+p+2x}{2}},\label{eq:intmultgammadef}
 \end{equation}
-where we integrate $S$ over the space of positive definite $p\times p$
-matrices, $A$ is a $p\times p$ nonsingular matrix, and the multivariate
-gamma function $\Gamma_{p}(a)$ is given in terms of the standard
-gamma function by:
+where the domain of integration of $S$ is the set of real symmetric positive definite
+matrices with dimension $p$, $A$ is a $p\times p$ nonsingular matrix, and $\Gamma_{p}(\cdot)$ is the multivariate gamma function given in terms of the standard gamma function $\Gamma(\cdot)$ by
 \begin{equation}
-\Gamma_{p}(a)=\pi^{p(p-1)/4}\prod_{j=1}^{p}\Gamma\left(a+(1-j)/2\right)\label{eq:multgammadef}
+\Gamma_{p}(a)=\pi^{p(p-1)/4}\prod_{j=1}^{p}\Gamma\left(a+\frac{1-j}{2}\right).\label{eq:multgammadef}
 \end{equation}
-we also define the multivariate digamma function
-\[
-\psi_{p}(a)=\frac{\partial}{\partial a}\log\Gamma_{p}(a)=\sum_{j=1}^{p}\psi(a+(1-j)/2)
-\]
+For notation convenience, the matrix determinant is represented as $|\cdot|$. We also define the multivariate digamma function
+\begin{equation}
+\psi_{p}(a)=\frac{\partial}{\partial a}\log\Gamma_{p}(a)=\sum_{j=1}^{p}\psi\left(a+\frac{1-j}{2}\right).
+\end{equation}
 
-The PDF of a random matrix $p\times m$ $T$ following a matrix-t
-distribution
-\[
-T_{p,m}(M,\Sigma,\Omega,n)
-\]
-is given by:
+A random $p\times m$ matrix $T$ following a matrix--$t$ distribution $T_{p,m}(M,\Sigma,\Omega,n)$
+has probability density
 \begin{equation}
-\begin{split}\textrm{tpdf}(T,M,\Sigma,\Omega,n)=\frac{\Gamma_{p}\left(\frac{p+n+m-1}{2}\right)}{\Gamma_{p}\left(\frac{n+p-1}{2}\right)\pi^{\frac{mp}{2}}(\det\Omega)^{\frac{p}{2}}(\det\Sigma)^{\frac{m}{2}}}\times\\
-\det\left(I_{p\times p}+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}}\right){}^{\frac{1-m-p-n}{2}}
-\end{split}
+f(T;\left\{M,\Sigma,\Omega,n\right\})=\frac{\Gamma_{p}\left(\frac{p+n+m-1}{2}\right)}{\Gamma_{p}\left(\frac{n+p-1}{2}\right)\pi^{\frac{mp}{2}}|\Omega|^{\frac{p}{2}}|\Sigma|^{\frac{m}{2}}}
+|I_p+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}}|^{\frac{1-m-p-n}{2}},
 \label{eq:matrixtpdf}
 \end{equation}
-where $\Sigma$ is a $p\times p$ positive definite matrix, $\Omega$
-is a $m\times m$ positive definite matrix, $M$ is a $p\times m$
-matrix, and $n$ is the number of degrees of freedom.
+where $\Sigma$ and $\Omega$ are both real symmetric positive definite matrices of dimension $p$ and $m$, respectively, $M$ is a $p\times m$ matrix indicates the offset, and $n$ is the number of degrees of freedom.
 
-Following {[}book{]}, we begin by deriving the PDF of the matrix-t,
-starting from a matrix normal distributed random matrix $X$, where
-row-covariance matrix $S$ is distributed following a Wishart distribution
-with the appropriate count of degrees of freedom (independent from
-$X$), and marginalizing over $S$. We repeat the results from {[}book{]}
-because, along the way, we will write several results that will be
-useful in the derivation of the EM formulas.
+Following {[}book{]} we begin by deriving the probability density of matrix--$t$ distribution starting from a matrix normal $N_{p,m}(M,S,\Omega)$ distributed random variate $X$ with Wishart $W_{p}\left(\Sigma,\nu\right)$ distributed row-scale parameter $S$ of appropriate degrees of freedom $\nu$ (independent from $X$), and marginalizing over $S$. Note that the row scale parameter $S$ is a real symmetric positive definite matrix. We repeat the results here because, along the way, we will utilize several results that are useful in the derivation of the EM formulas.
 
-The $p\times m$ random matrix $X$ follows the matrix-normal distribution
-
-\begin{equation}
-N_{p,m}(M,S,\Omega)\label{eq:ndist}
-\end{equation}
-if its PDF is given by:
+The $p\times m$ random matrix $X$ follows $N_{p,m}(M,S,\Omega)$ has probability density
 \begin{equation}
 \frac{1}{(2\pi)^{pm/2}(\det\Omega)^{p/2}(\det S)^{m/2}}\exp\left(-\frac{1}{2}\textrm{tr}\left[\Omega^{-1}(X-M)^{\textrm{t}}S^{-1}(X-M)\right]\right)\label{eq:ndistpdf}
 \end{equation}
@@ -105,7 +85,7 @@ random matrix
 T=(S^{-\frac{1}{2}})^{t}X+M\label{eq:change}
 \end{equation}
 where $S^{\frac{1}{2}}$ is the Cholesky square root of $S$, follows
-a matrix-$t$ distribution with $n=\nu-p+1$. The Jacobian of this
+a matrix--$t$ distribution with $n=\nu-p+1$. The Jacobian of this
 transformation is 
 \begin{equation}
 (\det S)^{\frac{1}{2}m}.\label{eq:jac}
@@ -119,7 +99,7 @@ Eq.~\ref{eq:wdistpdf} and Eq.~\ref{eq:jac}:
 \end{split}
 \label{eq:jointpdf}
 \end{equation}
-Finally we obtain the PDF of the matrix-$t$ distribution Eq.~\ref{eq:matrixtpdf}
+Finally we obtain the PDF of the matrix--$t$ distribution Eq.~\ref{eq:matrixtpdf}
 by integrating over $S$ in the above expression, using directly Eq.~\ref{eq:intmultgammadef}
 and slightly rearranging the terms (in particular, noting that $\det(\Sigma+(T-M)\Omega^{-1}(T-M)^{\textrm{t}})=\det\Sigma\det(I_{p\times p}+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}})$).
 
@@ -148,7 +128,7 @@ we have:
 \]
 where the first two terms depend on $S$, and therefore we need to
 compute the corresponding integral, while for the rest, the integral
-is proportional to the PDF of the matrix-$t$ distribution, Eq.~\ref{eq:matrixtpdf}.
+is proportional to the PDF of the matrix--$t$ distribution, Eq.~\ref{eq:matrixtpdf}.
 In obtain to compute:
 \begin{equation}
 n_{t}\int_{S>0}j(T_{i},S,M,\Sigma,\Omega,n)\log\det SdS\label{eq:firstlogpart}
