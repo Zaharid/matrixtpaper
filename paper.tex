@@ -163,11 +163,11 @@ $\log j(T_{i},S,M_{t},\Sigma_{t},\Omega_{t},n_{t})$. Eliminating
 a global factor $\frac{1}{2}$ and terms that do not depend on the
 maximization parameters $\{M_{t},\Sigma_{t},\Omega_{t},n_{t}\}$,
 we have: 
-\[
+\begin{equation}
 \begin{split}\log j(T_{i},S,M_{t},\Sigma_{t},\Omega_{t},n_{t})\sim n_{t}\log\det S+\textrm{tr}(S(\Sigma_{t}+(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}))\\
 -n_{t}p\log2-p\log\det\Omega_{t}+(n_{t}+p-1)\log\det\Sigma_{t}-2\log\Gamma_{p}(\frac{1}{2}(n_{t}+p-1))
 \end{split}
-\]
+\end{equation}
 where the first two terms depend on $S$, and therefore we need to
 compute the corresponding integral, while for the rest, the integral
 is proportional to the PDF of the matrix--$t$ distribution, Eq.~\ref{eq:matrixtpdf}.
@@ -183,14 +183,14 @@ we have:
 We can solve Eq.~\ref{eq:firstlogpart} by substituting this result directly.
 
 In order to compute the second nontrivial log term,
-\[
+\begin{equation}
 \int_{S>0}j(T_{i},S,M,\Sigma,\Omega,n)\textrm{tr}(S(\Sigma_{t}+(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}))dS
-\]
+\end{equation}
 we note that, due to the linearity of the trace, the result is equivalent
 to solving a matrix valued integral
-\[
+\begin{equation}
 \textrm{tr}\left[\left(\int_{S>0}j(T_{i},S,M,\Sigma,\Omega,n)SdS\right)(\Sigma_{t}+(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}})\right]\,.
-\]
+\end{equation}
 The enclosed integral also follows from Eq.~\ref{eq:intmultgammadef},
 after taking the matrix derivative with respect to $A$. Using, for
 symmetric $S$
@@ -198,13 +198,13 @@ symmetric $S$
 \frac{d}{dA}\det A=(\det A)A^{-1}\label{eq:detderivative}
 \end{equation}
 and
-\[
+\begin{equation}
 \frac{d}{dA}e^{\textrm{tr}SA}=(e^{\textrm{trS}A})S
-\]
+\end{equation}
 we have 
-\[
+\begin{equation}
 \int_{S>0}e^{-\textrm{tr}SA}(\det S)^{x}SdS=-\frac{1}{2}(1+p+2x)\Gamma_{p}\left(\frac{1}{2}(1+p+2x)\right)(\det A)^{\frac{1}{2}(p+2x-1)}A^{-1}
-\]
+\end{equation}
 from where again, we can obtain the result by direct substitution.
 
 Combining results of the two integrals together, and with adequate
@@ -220,40 +220,40 @@ The maximization formulas are obtained setting the derivatives of
 this equation to zero.
 
 For $M_{t}$ we have:
-\[
+\begin{equation}
 \frac{dE}{dM_{t}}=0\Rightarrow\sum_{i}^{N}\left((T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}+\Sigma\right)^{-1}\left(T_{i}-M_{t}\right)\Omega_{t}^{-1}=0
-\]
+\end{equation}
 and because $\Omega_{t}$ is nonsingular, we can obtain $M_{t}$ as
 a weighted average of the input data:
-\[
+\begin{equation}
 M_{t}=\frac{1}{N}\sum_{i}^{N}\left((T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}+\Sigma\right)^{-1}T_{i}=\frac{1}{N}\sum_{i}^{N}W_{i}T_{i}
-\]
+\end{equation}
 where we have defined the weight matrices $W_{i}$ as
-\[
+\begin{equation}
 W_{i}=\left((T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}+\Sigma\right)^{-1}
-\]
+\end{equation}
 
 $\Sigma_{t}$ is given in terms of the inverse of the mean weight
 by:
-\[
+\begin{equation}
 \Sigma_{t}=\frac{n_{t}+p-1}{n+m+p-1}\left[\frac{1}{N}\sum_{i}^{N}W_{i}\right]^{-1}
-\]
+\end{equation}
 Note that it depends on $n_{t}$.
 
 For $\Omega_{t}$ we obtain:
-\[
+\begin{equation}
 \Omega_{t}=\frac{n+p+m-1}{p}\frac{1}{N}\sum_{i}^{N}(T_{i}-M_{t})W_{i}(T_{i}-M_{t})
-\]
+\end{equation}
 and for $n_{t}$, in the case where $\Sigma_{t}$ is a free parameter
 that needs to be estimated, we have:
-\[
+\begin{equation}
 -p\log(m+n+p-1)+p\log(n_{t}+p-1)+\frac{1}{N}\sum_{i}^{N}\log\det W_{i}-\log\det\left(\frac{1}{N}\sum_{i}^{N}W_{i}\right)+\psi_{p}(\frac{1}{2}(m+n+p-1))-\psi_{p}(\frac{1}{2}(n_{t}+p-1))=0
-\]
+\end{equation}
 otherwise if $\Sigma_{t}=\Sigma$ is fixed and does not depend on
 $n_{t}$:
-\[
+\begin{equation}
 \log\det\Sigma_{t}-\log\det\left(\frac{1}{N}\sum_{i}^{N}W_{i}\right)+\psi_{p}(\frac{1}{2}(m+n+p-1))-\psi_{p}(\frac{1}{2}(n_{t}+p-1))=0
-\]
+\end{equation}
 
 \bibliographystyle{unsrtnat}
 \bibliography{references}
