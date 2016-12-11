@@ -54,40 +54,59 @@ the scale matrices is sampled from a Wishart distribution.
 
 \paragraph{Derivation}
 
-The derivation of the EM formulae is mainly based on the following integral identity:
+The derivation of the EM formulae is mainly based on the following
+integral identity:
 
 \begin{equation}
 \int_{S\succ 0}e^{-\textrm{tr}(SA)}|S|^{x}dS=\Gamma_{p}\left(\frac{1+p+2x}{2}\right)|A|^{\frac{1+p+2x}{2}},\label{eq:intmultgammadef}
 \end{equation}
-where the domain of integration of $S$ is the set of real symmetric positive definite
-matrices with dimension $p$, $A$ is a $p\times p$ nonsingular matrix, and $\Gamma_{p}(\cdot)$ is the multivariate gamma function given in terms of the standard gamma function $\Gamma(\cdot)$ by
+where the domain of integration of $S$ is the set of real symmetric
+positive definite matrices with dimension $p$, $A$ is a $p\times p$
+nonsingular matrix, and $\Gamma_{p}(\cdot)$ is the multivariate gamma
+function, given in terms of the standard gamma function $\Gamma(\cdot)$
+by
 \begin{equation}
 \Gamma_{p}(a)=\pi^{p(p-1)/4}\prod_{j=1}^{p}\Gamma\left(a+\frac{1-j}{2}\right).\label{eq:multgammadef}
 \end{equation}
-For notation convenience, the matrix determinant is represented as $|\cdot|$. We also define the multivariate digamma function
-\begin{equation}
-\psi_{p}(a)=\frac{\partial}{\partial a}\log\Gamma_{p}(a)=\sum_{j=1}^{p}\psi\left(a+\frac{1-j}{2}\right).
+For notation convenience, the matrix determinant is represented as
+$|\cdot|$. We also define the multivariate digamma function
+%
+\begin{equation} \psi_{p}(a)=\frac{\partial}{\partial
+	a}\log\Gamma_{p}(a)=\sum_{j=1}^{p}\psi\left(a+\frac{1-j}{2}\right).
 \end{equation}
 
-A random $p\times m$ matrix $T$ following a matrix--$t$ distribution $T_{p,m}(M,\Sigma,\Omega,n)$
-has probability density
+A random $p\times m$ matrix $T$ following a matrix--$t$ distribution
+$T_{p,m}(M,\Sigma,\Omega,n)$ has the probability density
 \begin{equation}
 f(T;\left\{M,\Sigma,\Omega,n\right\})=\frac{\Gamma_{p}\left(\frac{p+n+m-1}{2}\right)}{\Gamma_{p}\left(\frac{n+p-1}{2}\right)\pi^{\frac{mp}{2}}|\Omega|^{\frac{p}{2}}|\Sigma|^{\frac{m}{2}}}
 |I_p+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}}|^{\frac{1-m-p-n}{2}},
 \label{eq:matrixtpdf}
 \end{equation}
-where $\Sigma$ and $\Omega$ are both real symmetric positive definite matrices of dimension $p$ and $m$, respectively, $M$ is a $p\times m$ matrix indicates the offset, and $n$ is the number of degrees of freedom.
+where $\Sigma$ and $\Omega$ are both real symmetric positive definite
+matrices of dimension $p$ and $m$, respectively, $M$ is a $p\times m$
+matrix that indicates the location of the distribution, and $n$ is the
+number of degrees of freedom.
 
-Following {[}book{]} we begin by deriving the probability density of matrix--$t$ distribution starting from a matrix normal $N_{p,m}(M,S,\Omega)$ distributed random variate $X$ with Wishart $W_{p}\left(\Sigma,\nu\right)$ distributed row-scale parameter $S$ of appropriate degrees of freedom $\nu$ (independent from $X$), and marginalizing over $S$. Note that the row scale parameter $S$ is a real symmetric positive definite matrix. We repeat the results here because, along the way, we will utilize several results that are useful in the derivation of the EM formulas.
+Following \citet{gupta1999matrix}, we begin by deriving the
+probability density of the matrix--$t$ distribution starting from
+a matrix normal $N_{p,m}(M,S,\Omega)$ distributed random variate $X$
+with Wishart $W_{p}\left(\Sigma,\nu\right)$ distributed row-scale
+parameter $S$ of appropriate degrees of freedom $\nu$ (independent
+from $X$), and marginalizing over $S$. Note that the row scale
+parameter $S$ is a real symmetric positive definite matrix. We repeat
+the results here because, along the way, we will utilize several
+results that are useful in the derivation of the EM formulas.
 
-The $p\times m$ random matrix $X$ follows $N_{p,m}(M,S,\Omega)$ has probability density
+The $p\times m$ random matrix $X$ follows $N_{p,m}(M,S,\Omega)$ has
+the probability density %
 \begin{equation}
-\frac{1}{(2\pi)^{pm/2}(\det\Omega)^{p/2}(\det S)^{m/2}}\exp\left(-\frac{1}{2}\textrm{tr}\left[\Omega^{-1}(X-M)^{\textrm{t}}S^{-1}(X-M)\right]\right)\label{eq:ndistpdf}
+	\frac{1}{(2\pi)^{pm/2}(\det\Omega)^{p/2}(\det
+	S)^{m/2}}\exp\left(-\frac{1}{2}\textrm{tr}\left[\Omega^{-1}(X-M)^{\textrm{t}}S^{-1}(X-M)\right]\right)\label{eq:ndistpdf}
 \end{equation}
-where $S$ is a $p\times p$ positive definite matrix (the covariance
-of the rows of $X$), $\Omega$ is a $m\times m$ positive definite
-matrix (the covariance of the columns of $X$) and $M$ is a $p\times m$
-matrix (the mean of $X$).
+where $S$ is a $p\times p$ positive definite matrix (the covariance of
+the rows of $X$), $\Omega$ is a $m\times m$ positive definite matrix
+(the covariance of the columns of $X$) and $M$ is a $p\times m$ matrix
+(the mean of $X$).
 
 In turn, the $p\times p$ matrix $S$ follows a Wishart distribution
 \begin{equation}
@@ -98,9 +117,9 @@ W_{p}\left(\Sigma,\nu\right)\label{eq:wdist}
 \frac{1}{2^{\nu p/2}(\det\Sigma)^{\nu/2}\Gamma_{p}(\frac{\nu}{2})}(\det S)^{\frac{\nu-p-1}{2}}\exp\left(-\textrm{tr}(\Sigma^{-1}S)\right)\label{eq:wdistpdf}
 \end{equation}
 where $\Sigma$ is a $p\times p$ positive definite matrix, $\nu>p-1$
-is the degrees of freedom and $\Gamma_{p}$ is the multivariate gamma
-function defined in \ref{eq:multgammadef}. We will show that the
-random matrix
+is the number of degrees of freedom and $\Gamma_{p}$ is the
+multivariate gamma function defined in \ref{eq:multgammadef}. We will
+show that the random matrix
 \begin{equation}
 T=(S^{-\frac{1}{2}})^{t}X+M\label{eq:change}
 \end{equation}
@@ -119,9 +138,12 @@ Eq.~\ref{eq:wdistpdf} and Eq.~\ref{eq:jac}:
 \end{split}
 \label{eq:jointpdf}
 \end{equation}
-Finally we obtain the PDF of the matrix--$t$ distribution Eq.~\ref{eq:matrixtpdf}
-by integrating over $S$ in the above expression, using directly Eq.~\ref{eq:intmultgammadef}
-and slightly rearranging the terms (in particular, noting that $\det(\Sigma+(T-M)\Omega^{-1}(T-M)^{\textrm{t}})=\det\Sigma\det(I_{p\times p}+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}})$).
+Finally we obtain the PDF of the matrix--$t$ distribution
+Eq.~\ref{eq:matrixtpdf} by integrating over $S$ in the above
+expression, using directly Eq.~\ref{eq:intmultgammadef} and slightly
+rearranging the terms (in particular, noting that
+$\det(\Sigma+(T-M)\Omega^{-1}(T-M)^{\textrm{t}})=\det\Sigma\det(I_{p\times
+p}+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}})$).
 
 \subsection{Calculating the Expectation-maximization steps}
 
@@ -149,7 +171,7 @@ we have:
 where the first two terms depend on $S$, and therefore we need to
 compute the corresponding integral, while for the rest, the integral
 is proportional to the PDF of the matrix--$t$ distribution, Eq.~\ref{eq:matrixtpdf}.
-In obtain to compute:
+In order to compute:
 \begin{equation}
 n_{t}\int_{S>0}j(T_{i},S,M,\Sigma,\Omega,n)\log\det SdS\label{eq:firstlogpart}
 \end{equation}
@@ -158,7 +180,7 @@ we have:
 \begin{equation}
 \int_{S>0}e^{-\textrm{tr}SA}(\det S)^{x}\log\det SdS=\Gamma_{p}\left(\frac{1}{2}(1+p+2x)\right)(\det A)^{\frac{1}{2}(1+p+2x)}(\log\det A+\gamma_{p}(\frac{1}{2}(1+p+2x)))\label{eq:intderivative}
 \end{equation}
-We can solve \ref{eq:firstlogpart} by substituting this result directly.
+We can solve Eq.~\ref{eq:firstlogpart} by substituting this result directly.
 
 In order to compute the second nontrivial log term,
 \[
@@ -223,7 +245,7 @@ For $\Omega_{t}$ we obtain:
 \Omega_{t}=\frac{n+p+m-1}{p}\frac{1}{N}\sum_{i}^{N}(T_{i}-M_{t})W_{i}(T_{i}-M_{t})
 \]
 and for $n_{t}$, in the case where $\Sigma_{t}$ is a free parameter
-that needs to be estimated we have:
+that needs to be estimated, we have:
 \[
 -p\log(m+n+p-1)+p\log(n_{t}+p-1)+\frac{1}{N}\sum_{i}^{N}\log\det W_{i}-\log\det\left(\frac{1}{N}\sum_{i}^{N}W_{i}\right)+\psi_{p}(\frac{1}{2}(m+n+p-1))-\psi_{p}(\frac{1}{2}(n_{t}+p-1))=0
 \]
