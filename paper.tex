@@ -41,11 +41,20 @@ algorithms.
 Matrix--$t$ distributions have been applied to several predictive
 problems, such as spatial interpolation applied to the prediction of
 pollution concentration \citep{KIBRIA2006785}, recommendation systems
-\citep{NIPS2007_3203}, and ...
+\citep{NIPS2007_3203}. In these situations it is necessary to obtain
+the parameters of the metrix--$t$ distribution (consisting of the
+number of degrees of freedom, a location matrix and two scale
+matrices) that describe a set of given matrix valued observations.
+While the exact formulae for Maximum Likelihood Estimation (MLE) are
+unwieldy and slow to compute, the problem can be simplified if instead
+we obtain the distribution parameters using Expectation-Maximization
+(EM). We obtain can obtain the EM expressions by viewing the
+matrix--$t$  distribution as a matrix-normal distribution where one of
+the scale matrices is sampled from a Wishart distribution.
 
 \paragraph{Derivation}
 
-The derivation of EM formulae for matrix--$t$ distributions is mainly based on the following integral identity:
+The derivation of the EM formulae is mainly based on the following integral identity:
 
 \begin{equation}
 \int_{S\succ 0}e^{-\textrm{tr}(SA)}|S|^{x}dS=\Gamma_{p}\left(\frac{1+p+2x}{2}\right)|A|^{\frac{1+p+2x}{2}},\label{eq:intmultgammadef}
