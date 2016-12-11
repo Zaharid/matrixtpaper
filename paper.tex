@@ -4,7 +4,11 @@
 \usepackage{url}
 \usepackage{amsmath}
 \usepackage{amsthm}
-\usepackage{mathtools}
+\usepackage[authoryear]{natbib}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 0},pdfborderstyle={},backref=false,colorlinks=false]
+ {hyperref}\usepackage{mathtools}
 
 \title{ML Estimation of Matrix t Distributions with Expectation Maximization}
 
@@ -34,8 +38,10 @@ algorithms.
 \end{abstract}
 
 \paragraph{Introduction}
-Matrix--$t$ distributions have been applied to several predictive problems, such as spatial interpolation applied to the prediction of pollution concentration \cite{}, recommendation systems \cite{NIPS2007_3203}, and
-...
+Matrix--$t$ distributions have been applied to several predictive
+problems, such as spatial interpolation applied to the prediction of
+pollution concentration \citep{KIBRIA2006785}, recommendation systems
+\citep{NIPS2007_3203}, and ...
 
 \paragraph{Derivation}
 
@@ -218,5 +224,6 @@ $n_{t}$:
 \log\det\Sigma_{t}-\log\det\left(\frac{1}{N}\sum_{i}^{N}W_{i}\right)+\psi_{p}(\frac{1}{2}(m+n+p-1))-\psi_{p}(\frac{1}{2}(n_{t}+p-1))=0
 \]
 
+\bibliographystyle{unsrtnat}
 \bibliography{references}
 \end{document}
