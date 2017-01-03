@@ -60,7 +60,7 @@ integral identity:
 \begin{equation}
 \int_{S\succ 0}e^{-\textrm{tr}(SA)}|S|^{x}dS=\Gamma_{p}\left(\frac{1+p+2x}{2}\right)|A|^{\frac{1+p+2x}{2}},\label{eq:intmultgammadef}
 \end{equation}
-where the domain of integration of $S$ is the set of real symmetric
+where the domain of integration is the set of real symmetric
 positive definite matrices with dimension $p$, $A$ is a $p\times p$
 nonsingular matrix, and $\Gamma_{p}(\cdot)$ is the multivariate gamma
 function, given in terms of the standard gamma function $\Gamma(\cdot)$
@@ -89,61 +89,43 @@ number of degrees of freedom.
 
 Following \citet{gupta1999matrix}, we begin by deriving the
 probability density of the matrix--$t$ distribution starting from
-a matrix normal $N_{p,m}(M,S,\Omega)$ distributed random variate $X$
-with Wishart $W_{p}\left(\Sigma,\nu\right)$ distributed row-scale
-parameter $S$ of appropriate degrees of freedom $\nu$ (independent
-from $X$), and marginalizing over $S$. Note that the row scale
-parameter $S$ is a real symmetric positive definite matrix. We repeat
-the results here because, along the way, we will utilize several
-results that are useful in the derivation of the EM formulas.
+a matrix normal distributed random variate $X\sim N_{p,m}(M,S,\Omega)$
+with Wishart distributed row scale parameter $S \sim W_{p}\left(\Sigma,\nu\right)$ of appropriate degrees of freedom $\nu$ (independent from $X$), and marginalizing over $S$. Note that the row scale
+parameter $S$ is a real symmetric positive definite matrix. We repeat the results here because, along the way, we will utilize several results that are useful in the derivation of the EM formulas.
 
-The $p\times m$ random matrix $X$ follows $N_{p,m}(M,S,\Omega)$ has
-the probability density %
+The $p\times m$ random matrix $X \sim N_{p,m}(M,S,\Omega)$ has density
 \begin{equation}
-	\frac{1}{(2\pi)^{pm/2}(\det\Omega)^{p/2}(\det
-	S)^{m/2}}\exp\left(-\frac{1}{2}\textrm{tr}\left[\Omega^{-1}(X-M)^{\textrm{t}}S^{-1}(X-M)\right]\right)\label{eq:ndistpdf}
+	\frac{1}{(2\pi)^{pm/2}|\Omega|^{p/2}|S|^{m/2}}\exp\left(-\frac{1}{2}\textrm{tr}\left[\Omega^{-1}(X-M)^{\textrm{t}}S^{-1}(X-M)\right]\right),\label{eq:ndistpdf}
 \end{equation}
-where $S$ is a $p\times p$ positive definite matrix (the covariance of
-the rows of $X$), $\Omega$ is a $m\times m$ positive definite matrix
-(the covariance of the columns of $X$) and $M$ is a $p\times m$ matrix
-(the mean of $X$).
+where $S$ and $\Omega$ are symmetric positive definite matrices of dimension $p$ and $m$, respectively, and $M$ (the expectation of $X$) is a $p\times m$ matrix. The matrix $S$ is proportional to the covariance of the rows of $X$ while the matrix $\Omega$ is proportional to the covariance of the columns of $X$. In turn the $p\times p$ matrix $S\sim W_{p}\left(\Sigma,\nu\right)$ has density
+\begin{equation}
+\frac{|S|^{\frac{\nu-p-1}{2}}}{2^{\nu p/2}|\Sigma|^{\nu/2}\Gamma_{p}(\frac{\nu}{2})}\exp\left(-\textrm{tr}\left[\Sigma^{-1}S\right]\right),\label{eq:wdistpdf}
+\end{equation}
+where $\Sigma$ is a $p\times p$ symmetric positive definite matrix, $\nu>p-1$
+is the number of degrees of freedom, and $\Gamma_{p}$ is the
+multivariate gamma function defined in Eq.~\eqref{eq:multgammadef}.
 
-In turn, the $p\times p$ matrix $S$ follows a Wishart distribution
-\begin{equation}
-W_{p}\left(\Sigma,\nu\right)\label{eq:wdist}
-\end{equation}
- if its PDF is given by:
-\begin{equation}
-\frac{1}{2^{\nu p/2}(\det\Sigma)^{\nu/2}\Gamma_{p}(\frac{\nu}{2})}(\det S)^{\frac{\nu-p-1}{2}}\exp\left(-\textrm{tr}(\Sigma^{-1}S)\right)\label{eq:wdistpdf}
-\end{equation}
-where $\Sigma$ is a $p\times p$ positive definite matrix, $\nu>p-1$
-is the number of degrees of freedom and $\Gamma_{p}$ is the
-multivariate gamma function defined in \ref{eq:multgammadef}. We will
-show that the random matrix
+We will show that the matrix
 \begin{equation}
 T=(S^{-\frac{1}{2}})^{t}X+M\label{eq:change}
 \end{equation}
-where $S^{\frac{1}{2}}$ is the Cholesky square root of $S$, follows
-a matrix--$t$ distribution with $n=\nu-p+1$. The Jacobian of this
-transformation is 
+follows a matrix--$t$ distribution with degrees of freedom $n=\nu-p+1$. Here $S^{\frac{1}{2}}$ is the lower Cholesky factor of $S$, i.e., $S=S^{\frac{1}{2}}(S^{\frac{1}{2}})^t$. The Jacobian determinant of the transformation \eqref{eq:change} is
 \begin{equation}
-(\det S)^{\frac{1}{2}m}.\label{eq:jac}
+\left|\frac{\partial T}{\partial X}\right|=|S|^{-\frac{m}{2}}.\label{eq:jac}
 \end{equation}
 
-The joint PDF of $T$ and $S$ is the product of Eq.~\ref{eq:ndistpdf},
-Eq.~\ref{eq:wdistpdf} and Eq.~\ref{eq:jac}:
+Using Eq.~\eqref{eq:ndistpdf}, Eq.~\eqref{eq:wdistpdf} and Eq.~\eqref{eq:jac} we can see the joint PDF of $T$ and $S$ is given as
 \begin{equation}
 \begin{split}j(T,S,M,\Sigma,\Omega,n)\coloneqq\frac{\pi^{-\frac{mp}{2}}(\det\Sigma)^{\frac{n+p-1}{2}}(\det\Omega)^{\frac{n+m-2}{2}}(\det S)^{\frac{m+n-2}{2}}}{2^{p\frac{n+m+p-1}{2}}\Gamma_{p}(\frac{n+p-1}{2})}\times\\
-\exp\left(-\frac{1}{2}\textrm{tr}S(\Sigma+(T-M)\Omega^{-1}(T-M)^{\textrm{t}})\right)
+\exp\left(-\frac{1}{2}\textrm{tr}S(\Sigma+(T-M)\Omega^{-1}(T-M)^{\textrm{t}})\right).
 \end{split}
 \label{eq:jointpdf}
 \end{equation}
-Finally we obtain the PDF of the matrix--$t$ distribution
-Eq.~\ref{eq:matrixtpdf} by integrating over $S$ in the above
-expression, using directly Eq.~\ref{eq:intmultgammadef} and slightly
-rearranging the terms (in particular, noting that
+Finally we obtain the density \eqref{eq:matrixtpdf} of the matrix--$t$ distribution
+by integrating over $S$ in the above expression, using Eq.~\eqref{eq:intmultgammadef} and slightly
+rearranging the terms. In particular noting that
 $\det(\Sigma+(T-M)\Omega^{-1}(T-M)^{\textrm{t}})=\det\Sigma\det(I_{p\times
-p}+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}})$).
+p}+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}})$.
 
 \subsection{Calculating the Expectation-maximization steps}
 
