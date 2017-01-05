@@ -29,24 +29,13 @@
 \maketitle
 
 \begin{abstract}
-We provide expectation-maximization (EM) formulae for the maximum
-likelihood estimation of matrix--$t$ distributions and discuss their
-practical implementation.  The result can be applied to problems where
-the parameters of a matrix--$t$ distribution need to be obtained from
-data, such as the design of recommendation systems, or remote sensing
-algorithms.
+We provide expectation-maximization (EM) formulae for the maximum likelihood estimation of matrix--$t$ distributions and discuss their practical implementation. The result can be applied to problems where the parameters of a matrix--$t$ distribution need to be obtained from data, such as the design of recommendation systems and remote sensing algorithms.
 \end{abstract}
 
 \paragraph{Introduction}
-Matrix--$t$ distributions have been applied to several predictive
-problems, such as spatial interpolation applied to the prediction of
-pollution concentration \citep{KIBRIA2006785}, recommendation systems
-\citep{NIPS2007_3203}. In these situations it is necessary to obtain
-the parameters of the metrix--$t$ distribution (consisting of the
-number of degrees of freedom, a location matrix and two scale
-matrices) that describe a set of given matrix valued observations.
-While the exact formulae for Maximum Likelihood Estimation (MLE) are
-unwieldy and slow to compute, the problem can be simplified if instead
+Matrix--$t$ distribution is a generalization of multivariate $t$ distribution to matrix variates situations. Similar as other $t$ distributions, matrix--$t$ distribution is a scale mixture of a particular class of multivariate normal models, matrix normal distributions \citep{}, except the mixture parameter is a matrix rather than a scalar. Due to this, the distribution shares the importance in robust estimation and has been applied to many predictive tasks such as spatial interpolation on the prediction of pollution concentration \citep{KIBRIA2006785}, recommendation systems \citep{NIPS2007_3203}, and ... In these problems, it is necessary to obtain the parameters of the distribution, which consist of a degrees of freedom parameter, a matrix location parameter, and two scale matrix parameters, that describe a set of given matrix--valued observations for further inference.
+
+A common approach on estimating the parameters is through the method of maximum likelihood (ML). However, optimizing the likelihood directly is a formidable task and the gradient equations are unwieldy and slow to compute and solve. For $t$-distributions, it is well-known that one can exploit the scale mixture property and ...... he problem can be simplified if instead
 we obtain the distribution parameters using Expectation-Maximization
 (EM). We obtain can obtain the EM expressions by viewing the
 matrix--$t$  distribution as a matrix-normal distribution where one of
