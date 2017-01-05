@@ -58,7 +58,7 @@ The derivation of the EM formulae is mainly based on the following
 integral identity:
 
 \begin{equation}
-\int_{S\succ 0}e^{-\textrm{tr}(SA)}|S|^{x}dS=\Gamma_{p}\left(\frac{1+p+2x}{2}\right)|A|^{\frac{1+p+2x}{2}},\label{eq:intmultgammadef}
+\int_{S\succ 0}e^{-\textrm{tr}(SA)}|S|^{x}\,dS=\Gamma_{p}\left(\frac{1+p+2x}{2}\right)|A|^{\frac{1+p+2x}{2}},\label{eq:intmultgammadef}
 \end{equation}
 where the domain of integration is the set of real symmetric
 positive definite matrices with dimension $p$, $A$ is a $p\times p$
@@ -113,69 +113,55 @@ follows a matrix--$t$ distribution with degrees of freedom $n=\nu-p+1$. Here $S^
 \begin{equation}
 \left|\frac{\partial T}{\partial X}\right|=|S|^{-\frac{m}{2}}.\label{eq:jac}
 \end{equation}
-
-Using Eq.~\eqref{eq:ndistpdf}, Eq.~\eqref{eq:wdistpdf} and Eq.~\eqref{eq:jac} we can see the joint PDF of $T$ and $S$ is given as
+Using Eq.~\eqref{eq:ndistpdf}, Eq.~\eqref{eq:wdistpdf} and Eq.~\eqref{eq:jac} we can see the joint density of $T$ and $S$ is given as
 \begin{equation}
-\begin{split}j(T,S,M,\Sigma,\Omega,n)\coloneqq\frac{\pi^{-\frac{mp}{2}}(\det\Sigma)^{\frac{n+p-1}{2}}(\det\Omega)^{\frac{n+m-2}{2}}(\det S)^{\frac{m+n-2}{2}}}{2^{p\frac{n+m+p-1}{2}}\Gamma_{p}(\frac{n+p-1}{2})}\times\\
-\exp\left(-\frac{1}{2}\textrm{tr}S(\Sigma+(T-M)\Omega^{-1}(T-M)^{\textrm{t}})\right).
+\begin{split}j(T,S;\left\{M,\Sigma,\Omega,n\right\})=\frac{\pi^{-\frac{mp}{2}}|\Sigma|^{\frac{n+p-1}{2}}|\Omega|^{\frac{n+m-2}{2}}|S|^{\frac{m+n-2}{2}}}{2^{p\frac{n+m+p-1}{2}}\Gamma_{p}(\frac{n+p-1}{2})}\times\\
+\exp\left(-\frac{1}{2}\textrm{tr}\left[S(\Sigma+(T-M)\Omega^{-1}(T-M)^{\textrm{t}}\right]\right).
 \end{split}
 \label{eq:jointpdf}
 \end{equation}
+
 Finally we obtain the density \eqref{eq:matrixtpdf} of the matrix--$t$ distribution
-by integrating over $S$ in the above expression, using Eq.~\eqref{eq:intmultgammadef} and slightly
+by integrating over $S$ in the above expression, using Eq.~\eqref{eq:change} and slightly
 rearranging the terms. In particular noting that
-$\det(\Sigma+(T-M)\Omega^{-1}(T-M)^{\textrm{t}})=\det\Sigma\det(I_{p\times
-p}+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}})$.
+$|\Sigma+(T-M)\Omega^{-1}(T-M)^{\textrm{t}}|=|\Sigma||I_p+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}}|$.
 
 \subsection{Calculating the Expectation-maximization steps}
 
 The expectation maximization formalism entails calculating 
 \begin{equation}
-E=\sum_{i}^{N}\frac{\int_{S>0}j(T_{i},S,M,\Sigma,\Omega,n)\log j(T_{i},S,M_{t},\Sigma_{t},\Omega_{t},n_{t})dS}{\textrm{tpdf}(T,M,\Sigma,\Omega,n)}\label{eq:expdef}
+E=\sum_{i=1}^{N}\frac{\int_{S\succ 0}j(T_{i},S,M,\Sigma,\Omega,n)\log j(T_{i},S,M_{t},\Sigma_{t},\Omega_{t},n_{t})\,dS}{f(T;\left\{M,\Sigma,\Omega,n\right\})},\label{eq:expdef}
 \end{equation}
-where $\{T_{1}...T_{N}\}$ is an input set of data from which we wish
-to estimate the maximum likelihood parameters of the distribution.
-We omit writing explicitly the dependence of $E$ on all the parameters,
-i.e. $E\equiv E(T_{i},S,M,\Sigma,\Omega,n,M_{t},\Sigma_{t},\Omega_{t},n_{t})$.
-The values of the new guesses are found by computing the maximum with
-respect to the parameters $\{M_{t},\Sigma_{t},\Omega_{t},n_{t}\}$. 
+where $\{T_i\}_{i=1}^N$ is a dataset consists of matrix elements $T_i$ from which we wish to estimate the maximum likelihood parameters of the distribution. We omit writing explicitly the dependence of $E$ on all the parameters. The values of the new guesses are found by maximizing with respect to the parameters $\{M_{t},\Sigma_{t},\Omega_{t},n_{t}\}$.
 
-We can split the integral in Eq.~\ref{eq:expdef} by the terms of
-$\log j(T_{i},S,M_{t},\Sigma_{t},\Omega_{t},n_{t})$. Eliminating
-a global factor $\frac{1}{2}$ and terms that do not depend on the
-maximization parameters $\{M_{t},\Sigma_{t},\Omega_{t},n_{t}\}$,
-we have: 
+We can split the integral in Eq.~\eqref{eq:expdef} by the terms of $\log j(T_{i},S,M_{t},\Sigma_{t},\Omega_{t},n_{t})$. Eliminating a global factor $\frac{1}{2}$ and terms which do not depend on the
+maximization parameters $\{M_{t},\Sigma_{t},\Omega_{t},n_{t}\}$ we have
 \begin{equation}
-\begin{split}\log j(T_{i},S,M_{t},\Sigma_{t},\Omega_{t},n_{t})\sim n_{t}\log\det S+\textrm{tr}(S(\Sigma_{t}+(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}))\\
--n_{t}p\log2-p\log\det\Omega_{t}+(n_{t}+p-1)\log\det\Sigma_{t}-2\log\Gamma_{p}(\frac{1}{2}(n_{t}+p-1))
+\begin{split}\log j(T_{i},S;\left\{M_{t},\Sigma_{t},\Omega_{t},n_{t}\right\})\sim n_{t}\log|S|+\textrm{tr}\left[S(\Sigma_{t}+(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}})\right]\\
+-n_{t}p\log2-p\log |\Omega_{t}|+(n_{t}+p-1)\log |\Sigma_{t}|-2\log\Gamma_{p}(\frac{1}{2}(n_{t}+p-1)),
 \end{split}
 \end{equation}
-where the first two terms depend on $S$, and therefore we need to
-compute the corresponding integral, while for the rest, the integral
-is proportional to the PDF of the matrix--$t$ distribution, Eq.~\ref{eq:matrixtpdf}.
-In order to compute:
+where the first two terms depend on $S$, and therefore we need to compute the corresponding integral, while for the rest, the integral is proportional to the PDF of the matrix--$t$ distribution, Eq.~\eqref{eq:matrixtpdf}.
+
+To compute
 \begin{equation}
-n_{t}\int_{S>0}j(T_{i},S,M,\Sigma,\Omega,n)\log\det SdS\label{eq:firstlogpart}
+n_{t}\int_{S\succ 0}j(T_{i},S;\left\{M,\Sigma,\Omega,n\right\})\log |S|\,dS\label{eq:firstlogpart}
 \end{equation}
-we note that taking the derivative with respect to $x$ in Eq.~\ref{eq:intmultgammadef},
-we have:
+we note that taking the derivative with respect to $x$ in Eq.~\eqref{eq:intmultgammadef} we have
 \begin{equation}
-\int_{S>0}e^{-\textrm{tr}SA}(\det S)^{x}\log\det SdS=\Gamma_{p}\left(\frac{1}{2}(1+p+2x)\right)(\det A)^{\frac{1}{2}(1+p+2x)}(\log\det A+\gamma_{p}(\frac{1}{2}(1+p+2x)))\label{eq:intderivative}
+\int_{S\succ 0}e^{-\textrm{tr}\left[SA\right]}|S|^{x}\log |S|\,dS=\Gamma_{p}\left(\frac{1+p+2x}{2}\right)|A|^{\frac{1+p+2x}{2}}(\log |A|+\gamma_{p}\left(\frac{1+p+2x}{2}\right)).\label{eq:intderivative}
 \end{equation}
-We can solve Eq.~\ref{eq:firstlogpart} by substituting this result directly.
+Equation~\eqref{eq:firstlogpart} can be computed by utilizing this result directly.
 
 In order to compute the second nontrivial log term,
 \begin{equation}
-\int_{S>0}j(T_{i},S,M,\Sigma,\Omega,n)\textrm{tr}(S(\Sigma_{t}+(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}))dS
+\int_{S\succ 0}j\left(T_{i},S,\left\{M,\Sigma,\Omega,n\right\}\right)\textrm{tr}\left[S(\Sigma_{t}+(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}})\right]\,dS,
 \end{equation}
-we note that, due to the linearity of the trace, the result is equivalent
-to solving a matrix valued integral
+we note that due to the linearity of the trace the result is equivalent to solving a matrix valued integral
 \begin{equation}
-\textrm{tr}\left[\left(\int_{S>0}j(T_{i},S,M,\Sigma,\Omega,n)SdS\right)(\Sigma_{t}+(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}})\right]\,.
+\textrm{tr}\left[\left(\int_{S\succ 0}j\left(T_{i},S,\left\{M,\Sigma,\Omega,n\right\}\right)S\,dS\right)(\Sigma_{t}+(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}})\right]\,.
 \end{equation}
-The enclosed integral also follows from Eq.~\ref{eq:intmultgammadef},
-after taking the matrix derivative with respect to $A$. Using, for
-symmetric $S$
+The enclosed integral also follows from Eq.~\eqref{eq:intmultgammadef}, after taking the matrix derivative with respect to $A$. Using, for symmetric $S$
 \begin{equation}
 \frac{d}{dA}\det A=(\det A)A^{-1}\label{eq:detderivative}
 \end{equation}
@@ -185,21 +171,19 @@ and
 \end{equation}
 we have 
 \begin{equation}
-\int_{S>0}e^{-\textrm{tr}SA}(\det S)^{x}SdS=-\frac{1}{2}(1+p+2x)\Gamma_{p}\left(\frac{1}{2}(1+p+2x)\right)(\det A)^{\frac{1}{2}(p+2x-1)}A^{-1}
+\int_{S\succ 0}e^{-\textrm{tr}\left[SA\right]}|S|^{x}S\,dS=-\frac{1}{2}(1+p+2x)\Gamma_{p}\left(\frac{1}{2}(1+p+2x)\right)(\det A)^{\frac{1}{2}(p+2x-1)}A^{-1}
 \end{equation}
 from where again, we can obtain the result by direct substitution.
 
-Combining results of the two integrals together, and with adequate
-rearrangements we obtain the integrated form of Eq.~\ref{eq:expdef}:
+Combining results of the two integrals together with adequate rearrangements we obtain the integrated form of Eq.~\eqref{eq:expdef}
 \begin{equation}
-\begin{split}E=\sum_{i}^{N}n_{t}\psi_{p}\left(\frac{1}{2}(m+n+p-1)\right)-2\log\Gamma_{p}\left(\frac{1}{2}(n_{t}+p-1)\right)+p\log\det\Omega_{t}^{-1}\\
--n_{t}\log\det\left((T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}+\Sigma\right)+(n_{t}+p-1)\log\det\Sigma_{t}\\
+\begin{split}E=\sum_{i}^{N}n_{t}\psi_{p}\left(\frac{1}{2}(m+n+p-1)\right)-2\log\Gamma_{p}\left(\frac{1}{2}(n_{t}+p-1)\right)+p\log|\Omega_{t}|^{-1}\\
+-n_{t}\log|(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}+\Sigma|+(n_{t}+p-1)\log |\Sigma_{t}|\\
 -(m+n+p-1)\textrm{tr}\left(\left((T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}+\Sigma\right)^{-1}\left((T_{i}-M_{t})\Omega_{t}^{-1}(T_{i}-M_{t})^{\textrm{t}}+\Sigma_{t}\right)\right)
 \end{split}
 \label{eq:fsimp}
 \end{equation}
-The maximization formulas are obtained setting the derivatives of
-this equation to zero.
+The maximization formulas are obtained setting the derivatives of this equation to zero.
 
 For $M_{t}$ we have:
 \begin{equation}
@@ -229,7 +213,7 @@ For $\Omega_{t}$ we obtain:
 and for $n_{t}$, in the case where $\Sigma_{t}$ is a free parameter
 that needs to be estimated, we have:
 \begin{equation}
--p\log(m+n+p-1)+p\log(n_{t}+p-1)+\frac{1}{N}\sum_{i}^{N}\log\det W_{i}-\log\det\left(\frac{1}{N}\sum_{i}^{N}W_{i}\right)+\psi_{p}(\frac{1}{2}(m+n+p-1))-\psi_{p}(\frac{1}{2}(n_{t}+p-1))=0
+-p\log(m+n+p-1)+p\log(n_{t}+p-1)+\frac{1}{N}\sum_{i}^{N}\log|W_{i}|-\log\det\left|\frac{1}{N}\sum_{i}^{N}W_{i}\right|+\psi_{p}(\frac{1}{2}(m+n+p-1))-\psi_{p}(\frac{1}{2}(n_{t}+p-1))=0
 \end{equation}
 otherwise if $\Sigma_{t}=\Sigma$ is fixed and does not depend on
 $n_{t}$:
