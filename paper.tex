@@ -10,7 +10,7 @@
  breaklinks=false,pdfborder={0 0 0},pdfborderstyle={},backref=false,colorlinks=false]
  {hyperref}\usepackage{mathtools}
 
-\title{ML Estimation of Matrix t Distributions with Expectation Maximization}
+\title{ML Estimation of Matrix--$t$ Distributions with Expectation Maximization}
 
 
 \author{Zahari Kassabov\thanks{TIF-UNIMI-2016-5}\\
@@ -29,19 +29,17 @@
 \maketitle
 
 \begin{abstract}
-We provide expectation-maximization (EM) formulae for the maximum likelihood estimation of matrix--$t$ distributions and discuss their practical implementation. The result can be applied to problems where the parameters of a matrix--$t$ distribution need to be obtained from data, such as the design of recommendation systems and remote sensing algorithms.
+We provide an expectation-maximization (EM) formulae for the maximum likelihood estimation of matrix--$t$ distributions and discuss their practical implementation. The result can be applied to problems where the parameters of a matrix--$t$ distribution need to be obtained from data, such as the design of recommendation systems and remote sensing algorithms.
 \end{abstract}
 
-\paragraph{Introduction}
+\section{Introduction}
 Matrix--$t$ distribution is a generalization of multivariate $t$ distribution to matrix variates situations. Similar as other $t$ distributions, matrix--$t$ distribution is a scale mixture of a particular class of multivariate normal models, matrix normal distributions \citep{}, except the mixture parameter is a matrix rather than a scalar. Due to this, the distribution shares the importance in robust estimation and has been applied to many predictive tasks such as spatial interpolation on the prediction of pollution concentration \citep{KIBRIA2006785}, recommendation systems \citep{NIPS2007_3203}, and ... In these problems, it is necessary to obtain the parameters of the distribution, which consist of a degrees of freedom parameter, a matrix location parameter, and two scale matrix parameters, that describe a set of given matrix--valued observations for further inference.
 
-A common approach on estimating the parameters is through the method of maximum likelihood (ML). However, optimizing the likelihood directly is a formidable task and the gradient equations are unwieldy and slow to compute and solve. For $t$-distributions, it is well-known that one can exploit the scale mixture property and ...... he problem can be simplified if instead
-we obtain the distribution parameters using Expectation-Maximization
-(EM). We obtain can obtain the EM expressions by viewing the
-matrix--$t$  distribution as a matrix-normal distribution where one of
-the scale matrices is sampled from a Wishart distribution.
+A common approach on estimating the parameters is through the method of maximum likelihood (ML). However, optimizing the likelihood directly is a formidable task as the gradient equations are unwieldy slow to compute and solve. For $t$ distributions, it is well-known that one can exploit the property of scale mixture and apply expectation maximization (EM) technique to optimize the likelihood function \citep{}. The same trick can be also applied to matrix--$t$ distribution by viewing it a matrix-normal distribution with inverse Wishart distributed scale parameter.
 
-\paragraph{Derivation}
+This note is organized as follows. In section \ref{sec:derivation}, we present an EM formulae for MLE of matrix--$t$ distribution together with the relevant details on the derivation. The notation and the preliminary results on matrix calculus needed to present the derivation are presented sequentially in the section. Practical implementation of the algorithm is discussed in section \ref{sec:implement} and a brief conclusion is provided in section \ref{sec:conclusion}.
+
+\section{EM formulae for matrix--$t$ distribution}\label{sec:derivation}
 
 The derivation of the EM formulae is mainly based on the following
 integral identity:
@@ -80,7 +78,7 @@ Following \citet{gupta1999matrix}, we begin by deriving the
 probability density of the matrix--$t$ distribution starting from
 a matrix normal distributed random variate $X\sim N_{p,m}(M,S,\Omega)$
 with Wishart distributed row scale parameter $S \sim W_{p}\left(\Sigma,\nu\right)$ of appropriate degrees of freedom $\nu$ (independent from $X$), and marginalizing over $S$. Note that the row scale
-parameter $S$ is a real symmetric positive definite matrix. We repeat the results here because, along the way, we will utilize several results that are useful in the derivation of the EM formulas.
+parameter $S$ is a real symmetric positive definite matrix. We repeat the results here because, along the way, we will utilize several results that are useful in the derivation of the EM formulae.
 
 The $p\times m$ random matrix $X \sim N_{p,m}(M,S,\Omega)$ has density
 \begin{equation}
@@ -172,7 +170,7 @@ Combining results of the two integrals together with adequate rearrangements we 
 \end{split}
 \label{eq:fsimp}
 \end{equation}
-The maximization formulas are obtained setting the derivatives of this equation to zero.
+The maximization formulae is obtained setting the derivatives of this equation to zero.
 
 For $M_{t}$ we have:
 \begin{equation}
@@ -209,6 +207,10 @@ $n_{t}$:
 \begin{equation}
 \log\det\Sigma_{t}-\log\det\left(\frac{1}{N}\sum_{i}^{N}W_{i}\right)+\psi_{p}(\frac{1}{2}(m+n+p-1))-\psi_{p}(\frac{1}{2}(n_{t}+p-1))=0
 \end{equation}
+
+\section{Implementation}\label{sec:implement}
+
+\section{Conclusion}\label{sec:conclusion}
 
 \bibliographystyle{unsrtnat}
 \bibliography{references}
