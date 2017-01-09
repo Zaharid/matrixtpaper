@@ -33,21 +33,24 @@ We provide an expectation-maximization (EM) formulae for the maximum likelihood 
 \end{abstract}
 
 \section{Introduction}
-Matrix--$t$ distribution is a generalization of multivariate $t$ distribution to matrix variates situations. Similar as other $t$ distributions, matrix--$t$ distribution is a scale mixture of a particular class of multivariate normal models, matrix normal distributions \citep{}, except the mixture parameter is a matrix rather than a scalar. Due to this, the distribution shares the importance in robust estimation and has been applied to many predictive tasks such as spatial interpolation on the prediction of pollution concentration \citep{KIBRIA2006785}, recommendation systems \citep{NIPS2007_3203}, and ... In these problems, it is necessary to obtain the parameters of the distribution, which consist of a degrees of freedom parameter, a matrix location parameter, and two scale matrix parameters, that describe a set of given matrix--valued observations for further inference.
+Matrix--$t$ distribution is a generalization of multivariate $t$ distribution to matrix variates situations. Similar as other $t$ distributions, matrix--$t$ distribution is a scale mixture of a particular class of multivariate normal models, matrix normal distributions, except the mixture parameter is a matrix rather than a scalar \citep{gupta1999matrix}. Due to this, the distribution shares the importance in robust estimation and has been applied to many predictive tasks such as spatial interpolation on the prediction of pollution concentration \citep{KIBRIA2006785}, recommendation systems \citep{NIPS2007_3203}, and ... In these problems, it is necessary to obtain the parameters of the distribution, which consist of a degrees of freedom parameter, a matrix location parameter, and two scale matrix parameters, that describe a set of given matrix--valued observations for further inference.
 
-A common approach on estimating the parameters is through the method of maximum likelihood (ML). However, optimizing the likelihood directly is a formidable task as the gradient equations are unwieldy slow to compute and solve. For $t$ distributions, it is well-known that one can exploit the property of scale mixture and apply expectation maximization (EM) technique to optimize the likelihood function \citep{}. The same trick can be also applied to matrix--$t$ distribution by viewing it a matrix-normal distribution with inverse Wishart distributed scale parameter.
+A common approach on estimating the parameters is through the method of maximum likelihood (ML). However, optimizing the likelihood directly is a formidable task as the gradient equations are unwieldy slow to compute and solve. For $t$ distributions, it is well-known that one can exploit the property of scale mixture and apply expectation maximization (EM) technique to optimize the likelihood function \citep{10.2307/24305551}. The same trick can be also applied to matrix--$t$ distribution by viewing it as a matrix-normal distribution with inverse Wishart distributed scale parameter.
 
-This note is organized as follows. In section \ref{sec:derivation}, we present an EM formulae for MLE of matrix--$t$ distribution together with the relevant details on the derivation. The notation and the preliminary results on matrix calculus needed to present the derivation are presented sequentially in the section. Practical implementation of the algorithm is discussed in section \ref{sec:implement} and a brief conclusion is provided in section \ref{sec:conclusion}.
+This note is organized as follows. In section \ref{sec:derivation}, we present an EM formulae for MLE of matrix--$t$ distribution together with the relevant details on the derivation. The notation and the preliminary results on matrix calculus needed to present the derivation are presented sequentially in the section. Practical implementation of the algorithm is discussed in section \ref{sec:implement} and a brief conclusion is given in section \ref{sec:conclusion}.
 
 \section{EM formulae for matrix--$t$ distribution}\label{sec:derivation}
 
-The derivation of the EM formulae is mainly based on the following
-integral identity:
+All matrices referred in this note are real. For notation convenience, the matrix determinant is denoted as $|\cdot|$ and $\left\{S_p\succ 0\right\}$ is used to indicate the set of symmetric positive definite (SPD) matrices of dimension $p$.
 
+We first review some basic definitions on matrix--$t$ distributions. A matrix--$t$ distribution $T_{p,m}(M,\Sigma,\Omega,n)$ of dimensions $p\times m$ is specified by 4 parameters: the location matrix $M$ of dimensions $p\times m$ , the row and column SPD scale matrices $\Sigma$ and $\Omega$ of dimensions $p\times p$ and $m\times m$, respectively, and the degrees of freedom parameter $n>0$. A $p \times m$ random matrix $T$ is said to be matrix--$t$ distributed $T_{p,m}(M,\Sigma,\Omega,n)$ with location parameter $M$ if given the row scale parameter $S$, $T$ is matrix normal distributed 
+
+
+The derivation of the EM formulae is mainly based on the integral identity \citep{gupta1999matrix}
 \begin{equation}
-\int_{S\succ 0}e^{-\textrm{tr}(SA)}|S|^{x}\,dS=\Gamma_{p}\left(\frac{1+p+2x}{2}\right)|A|^{\frac{1+p+2x}{2}},\label{eq:intmultgammadef}
+\int_{S\succ 0}e^{-\textrm{tr}(SA)}|S|^{x}\,dS=\Gamma_{p}\left(x+\frac{1+p}{2}\right)|A|^{x+\frac{1+p}{2}}.\label{eq:intmultgammadef}
 \end{equation}
-where the domain of integration is the set of real symmetric
+Here the domain of integration is the set of real symmetric
 positive definite matrices with dimension $p$, $A$ is a $p\times p$
 nonsingular matrix, and $\Gamma_{p}(\cdot)$ is the multivariate gamma
 function, given in terms of the standard gamma function $\Gamma(\cdot)$
@@ -55,8 +58,7 @@ by
 \begin{equation}
 \Gamma_{p}(a)=\pi^{p(p-1)/4}\prod_{j=1}^{p}\Gamma\left(a+\frac{1-j}{2}\right).\label{eq:multgammadef}
 \end{equation}
-For notation convenience, the matrix determinant is represented as
-$|\cdot|$. We also define the multivariate digamma function
+We also define the multivariate digamma function
 %
 \begin{equation} \psi_{p}(a)=\frac{\partial}{\partial
 	a}\log\Gamma_{p}(a)=\sum_{j=1}^{p}\psi\left(a+\frac{1-j}{2}\right).
