@@ -52,7 +52,9 @@ We also define the multivariate digamma function
 \psi_{p}(x):=\frac{\partial}{\partial x}\log\Gamma_{p}(x)=\sum_{j=1}^{p}\psi\left(x+\frac{1-j}{2}\right).
 \end{equation}
 
-We first review some basic definitions on matrix--$t$ distributions. A matrix--$t$ distribution $T_{p,m}(M,\Sigma,\Omega,\nu)$ of dimensions $p\times m$ is specified by 4 parameters: the location matrix $M$ of dimensions $p\times m$ , the row and column SPD scale matrices $\Sigma$ and $\Omega$ of dimensions $p\times p$ and $m\times m$, respectively, and the degrees of freedom parameter $\nu>0$. A $p \times m$ random matrix $T$ is said to be matrix--$t$ distributed $T_{p,m}(M,\Sigma,\Omega,\nu)$ with location parameter $M$ if given the scale parameter $S$, a SPD matrix of dimensions $p\times p$, the random matrix $T$ is matrix normal distributed $N_{p,m}(M,S,\Omega)$ and $S$ is itself inverse Wishart distributed $W^{-1}(\Sigma,\nu +p -1)$:
+\subsection{Matrix--$t$ distribution}
+
+A matrix--$t$ distribution $T_{p,m}(M,\Sigma,\Omega,\nu)$ of dimensions $p\times m$ is specified by 4 parameters: the location matrix $M$ of dimensions $p\times m$ , the row and column SPD scale matrices $\Sigma$ and $\Omega$ of dimensions $p\times p$ and $m\times m$, respectively, and the degrees of freedom parameter $\nu>0$. A $p \times m$ random matrix $T$ is said to be matrix--$t$ distributed if given the scale parameter $S$, a SPD matrix of dimensions $p\times p$, the matrix $T$ is matrix normal distributed $N_{p,m}(M,S,\Omega)$ and $S$ is itself inverse Wishart distributed $W^{-1}(\Sigma,\nu +p -1)$:
 \begin{equation}
 T|M,\Sigma,\Omega,\nu,S \sim N_{p,m}(M,S,\Omega)\label{eq:tdef1}
 \end{equation}
@@ -60,7 +62,6 @@ and
 \begin{equation}
 S|\Sigma,\nu \sim W^{-1}(\Sigma,\nu+p-1).\label{eq:tdef2}
 \end{equation}
-
 The matrix normal distribution $N_{p,m}(M,S,\Omega)$ has density
 \begin{equation}
 \frac{1}{(2\pi)^{pm/2}|\Omega|^{p/2}|S|^{m/2}}\exp\left(-\frac{1}{2}\textrm{tr}\left[\Omega^{-1}(X-M)^{\textrm{t}}S^{-1}(X-M)\right]\right)\label{eq:ndistpdf}
@@ -78,38 +79,17 @@ Follow the definition in Eqs.~\eqref{eq:tdef1} and \eqref{eq:tdef2} and the dens
 |I_p+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}}|^{\frac{1-m-p-\nu}{2}}
 \label{eq:matrixtpdf}
 \end{equation}
-with $I_p$ the identity matrix of dimension $p$. The marginalization over $S$ can be obtained by using the Jacobain determinant
+with $I_p$ the identity matrix of dimension $p$. The marginalization over $S$ can be obtained by using the Jacobain determinant for inverse SPD matrix $U=S^{-1}$
 \begin{equation}
-...
+\left|\frac{\partial U}{\partial S}\right|=|S|^{-p-1}
 \end{equation}
 and the integral identity \citep{gupta1999matrix}
 \begin{equation}
-\int_{\left\{S_p\succ 0\right\}}e^{-\textrm{tr}[S_pA]}|S_p|^{\alpha}\,dS_p=\Gamma_{p}\left(\alpha+\frac{1+p}{2}\right)|A|^{\alpha+\frac{1+p}{2}},\label{eq:intmultgammadef}
+\int_{\left\{S_p\succ 0\right\}}e^{-\textrm{tr}[S_pA]}|S_p|^{\alpha}\,dS_p=\Gamma_{p}\left(\alpha+\frac{1+p}{2}\right)|A|^{-\alpha-\frac{1+p}{2}},\label{eq:intmultgammadef}
 \end{equation}
 where $A$ is a $p\times p$ nonsingular matrix.
 
-We repeat the results here because, along the way, we will utilize several results that are useful in the derivation of the EM formulae.
-
-We will show that the matrix
-\begin{equation}
-T=(S^{-\frac{1}{2}})^{t}X+M\label{eq:change}
-\end{equation}
-follows a matrix--$t$ distribution with degrees of freedom $n=\nu-p+1$. Here $S^{\frac{1}{2}}$ is the lower Cholesky factor of $S$, i.e., $S=S^{\frac{1}{2}}(S^{\frac{1}{2}})^t$. The Jacobian determinant of the transformation \eqref{eq:change} is
-\begin{equation}
-\left|\frac{\partial T}{\partial X}\right|=|S|^{-\frac{m}{2}}.\label{eq:jac}
-\end{equation}
-Using Eq.~\eqref{eq:ndistpdf}, Eq.~\eqref{eq:wdistpdf} and Eq.~\eqref{eq:jac} we can see the joint density of $T$ and $S$ is given as
-\begin{equation}
-\begin{split}j(T,S;\left\{M,\Sigma,\Omega,n\right\})=\frac{\pi^{-\frac{mp}{2}}|\Sigma|^{\frac{n+p-1}{2}}|\Omega|^{\frac{n+m-2}{2}}|S|^{\frac{m+n-2}{2}}}{2^{p\frac{n+m+p-1}{2}}\Gamma_{p}(\frac{n+p-1}{2})}\times\\
-\exp\left(-\frac{1}{2}\textrm{tr}\left[S(\Sigma+(T-M)\Omega^{-1}(T-M)^{\textrm{t}}\right]\right).
-\end{split}
-\label{eq:jointpdf}
-\end{equation}
-
-Finally we obtain the density \eqref{eq:matrixtpdf} of the matrix--$t$ distribution
-by integrating over $S$ in the above expression, using Eq.~\eqref{eq:change} and slightly
-rearranging the terms. In particular noting that
-$|\Sigma+(T-M)\Omega^{-1}(T-M)^{\textrm{t}}|=|\Sigma||I_p+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}}|$.
+Similar as matrix normal distributions, matrix--$t$ distributions are defined up to a multiplicative constant, i.e., $T_{p,m}(M,c\Omega,\Sigma/c,\nu)$ has the same distribution as $T_{p,m}(M,\Omega,\Sigma,\nu)$ for any $c>0$.
 
 \subsection{Calculating the Expectation-maximization steps}
 
