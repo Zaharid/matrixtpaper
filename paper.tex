@@ -41,58 +41,54 @@ This note is organized as follows. In section \ref{sec:derivation}, we present a
 
 \section{EM formulae for matrix--$t$ distribution}\label{sec:derivation}
 
-All matrices referred in this note are real. For notation convenience, the matrix determinant is denoted as $|\cdot|$ and $\left\{S_p\succ 0\right\}$ is used to indicate the set of symmetric positive definite (SPD) matrices of dimension $p$.
-
-We first review some basic definitions on matrix--$t$ distributions. A matrix--$t$ distribution $T_{p,m}(M,\Sigma,\Omega,n)$ of dimensions $p\times m$ is specified by 4 parameters: the location matrix $M$ of dimensions $p\times m$ , the row and column SPD scale matrices $\Sigma$ and $\Omega$ of dimensions $p\times p$ and $m\times m$, respectively, and the degrees of freedom parameter $n>0$. A $p \times m$ random matrix $T$ is said to be matrix--$t$ distributed $T_{p,m}(M,\Sigma,\Omega,n)$ with location parameter $M$ if given the row scale parameter $S$, $T$ is matrix normal distributed 
-
-
-The derivation of the EM formulae is mainly based on the integral identity \citep{gupta1999matrix}
+All matrices referred in this note are real. For notation convenience, the matrix determinant is denoted as $|\cdot|$ and $\left\{S_p\succ 0\right\}$ is used to indicate the set of symmetric positive definite (SPD) matrices of dimension $p$. The multivariate gamma
+function, $\Gamma_{p}(\cdot)$, given in terms of the standard gamma function $\Gamma(\cdot)$ has the form
 \begin{equation}
-\int_{S\succ 0}e^{-\textrm{tr}(SA)}|S|^{x}\,dS=\Gamma_{p}\left(x+\frac{1+p}{2}\right)|A|^{x+\frac{1+p}{2}}.\label{eq:intmultgammadef}
-\end{equation}
-Here the domain of integration is the set of real symmetric
-positive definite matrices with dimension $p$, $A$ is a $p\times p$
-nonsingular matrix, and $\Gamma_{p}(\cdot)$ is the multivariate gamma
-function, given in terms of the standard gamma function $\Gamma(\cdot)$
-by
-\begin{equation}
-\Gamma_{p}(a)=\pi^{p(p-1)/4}\prod_{j=1}^{p}\Gamma\left(a+\frac{1-j}{2}\right).\label{eq:multgammadef}
+\Gamma_{p}(x)=\pi^{p(p-1)/4}\prod_{j=1}^{p}\Gamma\left(x+\frac{1-j}{2}\right).\label{eq:multgammadef}
 \end{equation}
 We also define the multivariate digamma function
 %
-\begin{equation} \psi_{p}(a)=\frac{\partial}{\partial
-	a}\log\Gamma_{p}(a)=\sum_{j=1}^{p}\psi\left(a+\frac{1-j}{2}\right).
+\begin{equation}
+\psi_{p}(x):=\frac{\partial}{\partial x}\log\Gamma_{p}(x)=\sum_{j=1}^{p}\psi\left(x+\frac{1-j}{2}\right).
 \end{equation}
 
-A random $p\times m$ matrix $T$ following a matrix--$t$ distribution
-$T_{p,m}(M,\Sigma,\Omega,n)$ has the probability density
+We first review some basic definitions on matrix--$t$ distributions. A matrix--$t$ distribution $T_{p,m}(M,\Sigma,\Omega,\nu)$ of dimensions $p\times m$ is specified by 4 parameters: the location matrix $M$ of dimensions $p\times m$ , the row and column SPD scale matrices $\Sigma$ and $\Omega$ of dimensions $p\times p$ and $m\times m$, respectively, and the degrees of freedom parameter $\nu>0$. A $p \times m$ random matrix $T$ is said to be matrix--$t$ distributed $T_{p,m}(M,\Sigma,\Omega,\nu)$ with location parameter $M$ if given the scale parameter $S$, a SPD matrix of dimensions $p\times p$, the random matrix $T$ is matrix normal distributed $N_{p,m}(M,S,\Omega)$ and $S$ is itself inverse Wishart distributed $W^{-1}(\Sigma,\nu +p -1)$:
 \begin{equation}
-f(T;\left\{M,\Sigma,\Omega,n\right\})=\frac{\Gamma_{p}\left(\frac{p+n+m-1}{2}\right)}{\Gamma_{p}\left(\frac{n+p-1}{2}\right)\pi^{\frac{mp}{2}}|\Omega|^{\frac{p}{2}}|\Sigma|^{\frac{m}{2}}}
-|I_p+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}}|^{\frac{1-m-p-n}{2}},
+T|M,\Sigma,\Omega,\nu,S \sim N_{p,m}(M,S,\Omega)\label{eq:tdef1}
+\end{equation}
+and
+\begin{equation}
+S|\Sigma,\nu \sim W^{-1}(\Sigma,\nu+p-1).\label{eq:tdef2}
+\end{equation}
+
+The matrix normal distribution $N_{p,m}(M,S,\Omega)$ has density
+\begin{equation}
+\frac{1}{(2\pi)^{pm/2}|\Omega|^{p/2}|S|^{m/2}}\exp\left(-\frac{1}{2}\textrm{tr}\left[\Omega^{-1}(X-M)^{\textrm{t}}S^{-1}(X-M)\right]\right)\label{eq:ndistpdf}
+\end{equation}
+at $X$ while the inverse Wishart distribution $W^{-1}(\Sigma,n)$ with $n>p-1$ has density
+\begin{equation}
+\frac{|\Sigma|^{\frac{n}{2}}}{2^{\frac{n p}{2}}|S|^{\frac{n+p+1}{2}}\Gamma_{p}(\frac{n}{2})}\exp\left(-\frac{1}{2}\textrm{tr}\left[\Sigma S^{-1}\right]\right)\label{eq:wdistpdf}
+\end{equation}
+at $S$. Here $\Gamma_{p}(\cdot)$ is the
+multivariate gamma function defined in Eq.~\eqref{eq:multgammadef}.
+
+Follow the definition in Eqs.~\eqref{eq:tdef1} and \eqref{eq:tdef2} and the densities given above we can see the density function $f(T;\left\{M,\Sigma,\Omega,\nu\right\})$ of a matrix--$t$ distribution $T_{p,m}(M,\Sigma,\Omega,\nu)$ satisfies
+\begin{equation}
+\frac{\Gamma_{p}\left(\frac{p+\nu+m-1}{2}\right)}{\Gamma_{p}\left(\frac{\nu+p-1}{2}\right)\pi^{\frac{mp}{2}}|\Omega|^{\frac{p}{2}}|\Sigma|^{\frac{m}{2}}}
+|I_p+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}}|^{\frac{1-m-p-\nu}{2}}
 \label{eq:matrixtpdf}
 \end{equation}
-where $\Sigma$ and $\Omega$ are both real symmetric positive definite
-matrices of dimension $p$ and $m$, respectively, $M$ is a $p\times m$
-matrix that indicates the location of the distribution, and $n$ is the
-number of degrees of freedom.
-
-Following \citet{gupta1999matrix}, we begin by deriving the
-probability density of the matrix--$t$ distribution starting from
-a matrix normal distributed random variate $X\sim N_{p,m}(M,S,\Omega)$
-with Wishart distributed row scale parameter $S \sim W_{p}\left(\Sigma,\nu\right)$ of appropriate degrees of freedom $\nu$ (independent from $X$), and marginalizing over $S$. Note that the row scale
-parameter $S$ is a real symmetric positive definite matrix. We repeat the results here because, along the way, we will utilize several results that are useful in the derivation of the EM formulae.
-
-The $p\times m$ random matrix $X \sim N_{p,m}(M,S,\Omega)$ has density
+with $I_p$ the identity matrix of dimension $p$. The marginalization over $S$ can be obtained by using the Jacobain determinant
 \begin{equation}
-	\frac{1}{(2\pi)^{pm/2}|\Omega|^{p/2}|S|^{m/2}}\exp\left(-\frac{1}{2}\textrm{tr}\left[\Omega^{-1}(X-M)^{\textrm{t}}S^{-1}(X-M)\right]\right),\label{eq:ndistpdf}
+...
 \end{equation}
-where $S$ and $\Omega$ are symmetric positive definite matrices of dimension $p$ and $m$, respectively, and $M$ (the expectation of $X$) is a $p\times m$ matrix. The matrix $S$ is proportional to the covariance of the rows of $X$ while the matrix $\Omega$ is proportional to the covariance of the columns of $X$. In turn the $p\times p$ matrix $S\sim W_{p}\left(\Sigma,\nu\right)$ has density
+and the integral identity \citep{gupta1999matrix}
 \begin{equation}
-\frac{|S|^{\frac{\nu-p-1}{2}}}{2^{\nu p/2}|\Sigma|^{\nu/2}\Gamma_{p}(\frac{\nu}{2})}\exp\left(-\textrm{tr}\left[\Sigma^{-1}S\right]\right),\label{eq:wdistpdf}
+\int_{\left\{S_p\succ 0\right\}}e^{-\textrm{tr}[S_pA]}|S_p|^{\alpha}\,dS_p=\Gamma_{p}\left(\alpha+\frac{1+p}{2}\right)|A|^{\alpha+\frac{1+p}{2}},\label{eq:intmultgammadef}
 \end{equation}
-where $\Sigma$ is a $p\times p$ symmetric positive definite matrix, $\nu>p-1$
-is the number of degrees of freedom, and $\Gamma_{p}$ is the
-multivariate gamma function defined in Eq.~\eqref{eq:multgammadef}.
+where $A$ is a $p\times p$ nonsingular matrix.
+
+We repeat the results here because, along the way, we will utilize several results that are useful in the derivation of the EM formulae.
 
 We will show that the matrix
 \begin{equation}
