@@ -3,6 +3,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{url}
 \usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage{amsthm}
 \usepackage[authoryear]{natbib}
 \usepackage[unicode=true,pdfusetitle,
@@ -39,7 +40,7 @@ A common approach on estimating the parameters is through the method of maximum 
 
 This note is organized as follows. In section \ref{sec:derivation}, we present an EM formulae for MLE of matrix--$t$ distribution together with the relevant details on the derivation. The notation and the preliminary results on matrix calculus needed to present the derivation are presented sequentially in the section. Practical implementation of the algorithm is discussed in section \ref{sec:implement} and a brief conclusion is given in section \ref{sec:conclusion}.
 
-\section{EM formulae for matrix--$t$ distribution}\label{sec:derivation}
+\section{EM for matrix--$t$ distribution}\label{sec:derivation}
 
 All matrices referred in this note are real. For notation convenience, the matrix determinant is denoted as $|\cdot|$ and $\left\{S_p\succ 0\right\}$ is used to indicate the set of symmetric positive definite (SPD) matrices of dimension $p$. The multivariate gamma
 function, $\Gamma_{p}(\cdot)$, given in terms of the standard gamma function $\Gamma(\cdot)$ has the form
@@ -91,7 +92,20 @@ where $A$ is a $p\times p$ nonsingular matrix.
 
 Similar as matrix normal distributions, matrix--$t$ distributions are defined up to a multiplicative constant, i.e., $T_{p,m}(M,c\Omega,\Sigma/c,\nu)$ has the same distribution as $T_{p,m}(M,\Omega,\Sigma,\nu)$ for any $c>0$.
 
-\subsection{Calculating the Expectation-maximization steps}
+\subsection{EM formulas for matrix--$t$ distribution}
+
+Given a random variable $X$ with probability distribution with density (or mass) function $p_{\theta}(\cdot)$ with $\theta$ dependence. Assume the density (or mass) function is a marginalization over some unobserved random state $Z$, i.e., $p_{\theta}(x)=\mathbb{E}_{\theta}\left[p_{\theta}(x|Z)\right]$. With observations $\left\{x_i\right\}_{i\in I}$ the classical EM method of MLE consists of two step:
+
+\begin{itemize}
+\item At the $n$-th iteration, compute the conditional expectations with respect to $Z$
+\begin{equation}
+Q(\theta|\theta_n):=\sum_{i\in I}\mathbb{E}_{\theta_n}\left[\log p_{\theta}(x_i,Z)|x_i\right].
+\end{equation}
+
+\item Update $\theta$ by maximizing $Q(\theta|\theta_n)$, i.e., $\theta_{n+1} = \textrm{argmax}_{\theta}\,Q(\theta|\theta_n)$.
+\end{itemize}
+
+For matrix--$t$ distributions, 
 
 The expectation maximization formalism entails calculating 
 \begin{equation}
