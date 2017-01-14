@@ -90,28 +90,26 @@ and the integral identity \citep{gupta1999matrix}
 \end{equation}
 where $A$ is a $p\times p$ nonsingular matrix.
 
-Similar as matrix normal distributions, matrix--$t$ distributions are defined up to a multiplicative constant, i.e., $T_{p,m}(M,c\Omega,\Sigma/c,\nu)$ has the same distribution as $T_{p,m}(M,\Omega,\Sigma,\nu)$ for any $c>0$.
+Similar as matrix normal distributions, matrix--$t$ distributions are defined up to a multiplicative constant, i.e., $T_{p,m}(M,c\,\Omega,\Sigma/c,\nu)$ has the same distribution as $T_{p,m}(M,\Omega,\Sigma,\nu)$ for any constant $c>0$.
 
 \subsection{EM formulas for matrix--$t$ distribution}
 
-Given a random variable $X$ with probability distribution with density (or mass) function $p_{\theta}(\cdot)$ with $\theta$ dependence. Assume the density (or mass) function is a marginalization over some unobserved random state $Z$, i.e., $p_{\theta}(x)=\mathbb{E}_{\theta}\left[p_{\theta}(x|Z)\right]$. With observations $\left\{x_i\right\}_{i\in I}$ the classical EM method of MLE consists of two step:
+Given a random variable $X$ with probability distribution with density (or mass) function $p_{\theta}(\cdot)$ with $\theta$ dependence. Assume the density (or mass) function is a marginalization over some unobserved random state $Z$, i.e., $p_{\theta}(x)=\mathbb{E}_{\theta}\left[p_{\theta}(x|Z)\right]$. With observations $\left\{x_i\right\}_{i\in I}$ the classical EM method of MLE consists of two steps:
 
 \begin{itemize}
-\item At the $n$-th iteration, compute the conditional expectations with respect to $Z$
+\item At the $k$-th iteration, compute the conditional expectations with respect to $Z$
 \begin{equation}
-Q(\theta|\theta_n):=\sum_{i\in I}\mathbb{E}_{\theta_n}\left[\log p_{\theta}(x_i,Z)|x_i\right].
+Q(\theta,\theta_k):=\sum_{i\in I}\mathbb{E}_{\theta_k}\left[\log p_{\theta}(x_i,Z)|x_i\right].
 \end{equation}
 
-\item Update $\theta$ by maximizing $Q(\theta|\theta_n)$, i.e., $\theta_{n+1} = \textrm{argmax}_{\theta}\,Q(\theta|\theta_n)$.
+\item Update $\theta$ by maximizing $Q(\theta,\theta_k)$, i.e., $\theta_{k+1} = \textrm{argmax}_{\theta}\,Q(\theta,\theta_k)$.
 \end{itemize}
 
-For matrix--$t$ distributions, 
+Given observed matrix data $\left\{T_j\right\}_{j\in J}$, for each observation $T_j$ the E-step of matrix--$t$ distributions entails computing the following integral at step $k$
 
-The expectation maximization formalism entails calculating 
 \begin{equation}
-E=\sum_{i=1}^{N}\frac{\int_{S\succ 0}j(T_{i},S,M,\Sigma,\Omega,n)\log j(T_{i},S,M_{t},\Sigma_{t},\Omega_{t},n_{t})\,dS}{f(T;\left\{M,\Sigma,\Omega,n\right\})},\label{eq:expdef}
+Q(\theta,\theta_k)=\frac{\int_{S\succ 0}f(T_{j},S,\left\{M_k,\Sigma_k,\Omega_k,\nu_k\right\})\log f\left(T_{j},S,\left\{M,\Sigma,\Omega,\nu\right\}\right)\,dS}{f(T_j;\left\{M_k,\Sigma_k,\Omega_k,\nu_k\right\})},\label{eq:expdef}
 \end{equation}
-where $\{T_i\}_{i=1}^N$ is a dataset consists of matrix elements $T_i$ from which we wish to estimate the maximum likelihood parameters of the distribution. We omit writing explicitly the dependence of $E$ on all the parameters. The values of the new guesses are found by maximizing with respect to the parameters $\{M_{t},\Sigma_{t},\Omega_{t},n_{t}\}$.
 
 We can split the integral in Eq.~\eqref{eq:expdef} by the terms of $\log j(T_{i},S,M_{t},\Sigma_{t},\Omega_{t},n_{t})$. Eliminating a global factor $\frac{1}{2}$ and terms which do not depend on the
 maximization parameters $\{M_{t},\Sigma_{t},\Omega_{t},n_{t}\}$ we have
