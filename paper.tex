@@ -42,7 +42,7 @@ This note is organized as follows. In section \ref{sec:derivation}, we present a
 
 \section{EM for matrix--$t$ distribution}\label{sec:derivation}
 
-All matrices referred in this note are real. For notation convenience, the matrix determinant is denoted as $|\cdot|$ and $\left\{S_p\succ 0\right\}$ is used to indicate the set of symmetric positive definite (SPD) matrices of dimension $p$. The multivariate gamma
+All matrices referred in this note are real. For notation convenience, the matrix determinant is denoted as $|\cdot|$ and $\mathbf{S}_+^p$ is used to indicate the set of symmetric positive definite (SPD) matrices of dimension $p$. The multivariate gamma
 function, $\Gamma_{p}(\cdot)$, given in terms of the standard gamma function $\Gamma(\cdot)$ has the form
 \begin{equation}
 \Gamma_{p}(x)=\pi^{p(p-1)/4}\prod_{j=1}^{p}\Gamma\left(x+\frac{1-j}{2}\right).\label{eq:multgammadef}
@@ -57,11 +57,11 @@ We also define the multivariate digamma function
 
 A matrix--$t$ distribution $T_{p,m}(M,\Sigma,\Omega,\nu)$ of dimensions $p\times m$ is specified by 4 parameters: the location matrix $M$ of dimensions $p\times m$ , the row and column SPD scale matrices $\Sigma$ and $\Omega$ of dimensions $p\times p$ and $m\times m$, respectively, and the degrees of freedom parameter $\nu>0$. A $p \times m$ random matrix $T$ is said to be matrix--$t$ distributed if given the scale parameter $S$, a SPD matrix of dimensions $p\times p$, the matrix $T$ is matrix normal distributed $N_{p,m}(M,S,\Omega)$ and $S$ is itself inverse Wishart distributed $W^{-1}(\Sigma,\nu +p -1)$:
 \begin{equation}
-T|M,\Sigma,\Omega,\nu,S \sim N_{p,m}(M,S,\Omega)\label{eq:tdef1}
+T\,|\,M,\Sigma,\Omega,\nu,S \sim N_{p,m}(M,S,\Omega)\label{eq:tdef1}
 \end{equation}
 and
 \begin{equation}
-S|\Sigma,\nu \sim W^{-1}(\Sigma,\nu+p-1).\label{eq:tdef2}
+S\,|\,\Sigma,\nu \sim W^{-1}(\Sigma,\nu+p-1).\label{eq:tdef2}
 \end{equation}
 The matrix normal distribution $N_{p,m}(M,S,\Omega)$ has density
 \begin{equation}
@@ -86,7 +86,7 @@ with $I_p$ the identity matrix of dimension $p$. The marginalization over $S$ ca
 \end{equation}
 and the integral identity \citep{gupta1999matrix}
 \begin{equation}
-\int_{\left\{S_p\succ 0\right\}}e^{-\textrm{tr}[S_pA]}|S_p|^{\alpha}\,dS_p=\Gamma_{p}\left(\alpha+\frac{1+p}{2}\right)|A|^{-\alpha-\frac{1+p}{2}},\label{eq:intmultgammadef}
+\int_{\mathbf{S}_+^p}e^{-\textrm{tr}[S A]}|S|^{\alpha}\,dS=\Gamma_{p}\left(\alpha+\frac{1+p}{2}\right)|A|^{-\alpha-\frac{1+p}{2}},\label{eq:intmultgammadef}
 \end{equation}
 where $A$ is a $p\times p$ nonsingular matrix.
 
@@ -106,19 +106,25 @@ Q(\theta,\theta_k):=\sum_{i\in I}\mathbb{E}_{\theta_k}\left[\log p_{\theta}(x_i,
 \end{itemize}
 
 Given observed matrix data $\left\{T_j\right\}_{j\in J}$, for each observation $T_j$ the E-step of matrix--$t$ distributions entails computing the following integral at step $k$
-
 \begin{equation}
-Q(\theta,\theta_k)=\frac{\int_{S\succ 0}f(T_{j},S,\left\{M_k,\Sigma_k,\Omega_k,\nu_k\right\})\log f\left(T_{j},S,\left\{M,\Sigma,\Omega,\nu\right\}\right)\,dS}{f(T_j;\left\{M_k,\Sigma_k,\Omega_k,\nu_k\right\})},\label{eq:expdef}
+Q_j(\theta,\theta_k)=f(T_j;\theta_k)^{-1}\int_{\mathbf{S}_+^p}f(T_{j},S;\theta_k)\log f\left(T_{j},S;\theta\right)\,dS,\label{eq:expdef}
 \end{equation}
+where $\theta=\left\{M,\Sigma,\Omega,\nu\right\}$, $\theta_k=\left\{M_k,\Sigma_k,\Omega_k,\nu_k\right\}$, and $f(T,S;\theta)$ is the full likelihood of the matrix--$t$ distribution with the hidden scale parameter $S$.
 
-We can split the integral in Eq.~\eqref{eq:expdef} by the terms of $\log j(T_{i},S,M_{t},\Sigma_{t},\Omega_{t},n_{t})$. Eliminating a global factor $\frac{1}{2}$ and terms which do not depend on the
-maximization parameters $\{M_{t},\Sigma_{t},\Omega_{t},n_{t}\}$ we have
+We can split the integral in Eq.~\eqref{eq:expdef} by the terms of $\log f(T_{j},S;\theta)$. Eliminating a global factor $\frac{1}{2}$ and terms which do not depend on the parameters in $\theta$ we have
 \begin{equation}
-\begin{split}\log j(T_{i},S;\left\{M_{t},\Sigma_{t},\Omega_{t},n_{t}\right\})\sim n_{t}\log|S|+\textrm{tr}\left[S(\Sigma_{t}+(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}})\right]\\
--n_{t}p\log2-p\log |\Omega_{t}|+(n_{t}+p-1)\log |\Sigma_{t}|-2\log\Gamma_{p}(\frac{1}{2}(n_{t}+p-1)),
-\end{split}
+\begin{split}\log f(T_{j},S;\theta)\sim -\nu\log|S|-\textrm{tr}\left[S^{-1}(\Sigma+(T_j-M)\Omega^{-1}(T_j-M)^{\textrm{t}})\right]\\
+-\nu p\log2-p\log |\Omega|+(\nu+p-1)\log |\Sigma|-2\log\Gamma_{p}\left(\frac{\nu+p-1}{2}\right).
+\end{split}\label{eq:logf}
 \end{equation}
-where the first two terms depend on $S$, and therefore we need to compute the corresponding integral, while for the rest, the integral is proportional to the PDF of the matrix--$t$ distribution, Eq.~\eqref{eq:matrixtpdf}.
+From Eq.~\eqref{eq:logf}, we can see the only integrals which need to be computed are
+\begin{equation}
+\int_{\mathbf{S}_+^p}f(T_j,S;\theta_k)\log |S|\,dS
+\end{equation}
+and
+\begin{equation}
+\int_{\mathbf{S}_+^p}f(T_j,S;\theta_k) S^{-1}\,dS.
+\end{equation}
 
 To compute
 \begin{equation}
