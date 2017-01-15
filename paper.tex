@@ -119,24 +119,17 @@ We can split the integral in Eq.~\eqref{eq:expdef} by the terms of $\log f(T_{j}
 \end{equation}
 From Eq.~\eqref{eq:logf}, we can see the only integrals which need to be computed are
 \begin{equation}
-\int_{\mathbf{S}_+^p}f(T_j,S;\theta_k)\log |S|\,dS
+\int_{\mathbf{S}_+^p}f(T_j,S;\theta_k)\log |S|\,dS\label{eq:firstlogpart}
 \end{equation}
 and
 \begin{equation}
-\int_{\mathbf{S}_+^p}f(T_j,S;\theta_k) S^{-1}\,dS.
+\int_{\mathbf{S}_+^p}f(T_j,S;\theta_k) S^{-1}\,dS.\label{eq:2ndlogpart}
 \end{equation}
-
-To compute
+We note that taking the derivative with respect to $\alpha$ in Eq.~\eqref{eq:intmultgammadef} we have
 \begin{equation}
-n_{t}\int_{S\succ 0}j(T_{i},S;\left\{M,\Sigma,\Omega,n\right\})\log |S|\,dS\label{eq:firstlogpart}
+\int_{\mathbf{S}_+^p}e^{-\textrm{tr}\left[SA\right]}|S|^{\alpha}\log |S|\,dS=\Gamma_{p}\left(\alpha+\frac{1+p}{2}\right)|A|^{\alpha+\frac{1+p}{2}}\left\{\log |A|+\gamma_{p}\left(\alpha+\frac{1+p}{2}\right)\right\}\label{eq:intderivative}
 \end{equation}
-we note that taking the derivative with respect to $x$ in Eq.~\eqref{eq:intmultgammadef} we have
-\begin{equation}
-\int_{S\succ 0}e^{-\textrm{tr}\left[SA\right]}|S|^{x}\log |S|\,dS=\Gamma_{p}\left(\frac{1+p+2x}{2}\right)|A|^{\frac{1+p+2x}{2}}(\log |A|+\gamma_{p}\left(\frac{1+p+2x}{2}\right)).\label{eq:intderivative}
-\end{equation}
-Equation~\eqref{eq:firstlogpart} can be computed by utilizing this result directly.
-
-In order to compute the second nontrivial log term,
+and the integral \eqref{eq:firstlogpart} can be computed by utilizing this result directly. To compute the second nontrivial log term \eqref{eq:2ndlogpart}
 \begin{equation}
 \int_{S\succ 0}j\left(T_{i},S,\left\{M,\Sigma,\Omega,n\right\}\right)\textrm{tr}\left[S(\Sigma_{t}+(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}})\right]\,dS,
 \end{equation}
