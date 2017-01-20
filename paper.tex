@@ -125,37 +125,22 @@ and
 \begin{equation}
 \int_{\mathbf{S}_+^p}f(T_j,S;\theta_k) S^{-1}\,dS.\label{eq:2ndlogpart}
 \end{equation}
-We note that taking the derivative with respect to $\alpha$ in Eq.~\eqref{eq:intmultgammadef} we have
+Note that taking the derivative with respect to $\alpha$ in Eq.~\eqref{eq:intmultgammadef} we have
 \begin{equation}
-\int_{\mathbf{S}_+^p}e^{-\textrm{tr}\left[SA\right]}|S|^{\alpha}\log |S|\,dS=\Gamma_{p}\left(\alpha+\frac{1+p}{2}\right)|A|^{\alpha+\frac{1+p}{2}}\left\{\log |A|+\gamma_{p}\left(\alpha+\frac{1+p}{2}\right)\right\}\label{eq:intderivative}
+\int_{\mathbf{S}_+^p}e^{-\textrm{tr}\left[SA\right]}|S|^{\alpha}\log |S|\,dS=\Gamma_{p}\left(\alpha+\frac{1+p}{2}\right)|A|^{\alpha+\frac{1+p}{2}}\left\{\log |A|+\gamma_{p}\left(\alpha+\frac{1+p}{2}\right)\right\}\label{eq:intderivative1}
 \end{equation}
-and the integral \eqref{eq:firstlogpart} can be computed by utilizing this result directly. To compute the second nontrivial log term \eqref{eq:2ndlogpart}
+and hence the integral \eqref{eq:firstlogpart} follows this result directly. To compute the integral \eqref{eq:2ndlogpart} we take the matrix derivative of Eq.~\eqref{eq:intmultgammadef} with respect to $A$ and obtain
 \begin{equation}
-\int_{S\succ 0}j\left(T_{i},S,\left\{M,\Sigma,\Omega,n\right\}\right)\textrm{tr}\left[S(\Sigma_{t}+(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}})\right]\,dS,
-\end{equation}
-we note that due to the linearity of the trace the result is equivalent to solving a matrix valued integral
-\begin{equation}
-\textrm{tr}\left[\left(\int_{S\succ 0}j\left(T_{i},S,\left\{M,\Sigma,\Omega,n\right\}\right)S\,dS\right)(\Sigma_{t}+(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}})\right]\,.
-\end{equation}
-The enclosed integral also follows from Eq.~\eqref{eq:intmultgammadef}, after taking the matrix derivative with respect to $A$. Using, for symmetric $S$
-\begin{equation}
-\frac{d}{dA}\det A=(\det A)A^{-1}\label{eq:detderivative}
-\end{equation}
-and
-\begin{equation}
-\frac{d}{dA}e^{\textrm{tr}SA}=(e^{\textrm{trS}A})S
-\end{equation}
-we have 
-\begin{equation}
-\int_{S\succ 0}e^{-\textrm{tr}\left[SA\right]}|S|^{x}S\,dS=-\frac{1}{2}(1+p+2x)\Gamma_{p}\left(\frac{1}{2}(1+p+2x)\right)(\det A)^{\frac{1}{2}(p+2x-1)}A^{-1}
+\int_{\mathbf{S}_+^p}e^{-\textrm{tr}\left[SA\right]}|S|^{\alpha}S\,dS=-\left(\alpha+\frac{1+p}{2}\right)\Gamma_{p}\left(\alpha+\frac{1+p}{2}\right)|A|^{\alpha+\frac{p-1}{2}}A^{-1},\label{eq:intderivative2}
 \end{equation}
 from where again, we can obtain the result by direct substitution.
 
-Combining results of the two integrals together with adequate rearrangements we obtain the integrated form of Eq.~\eqref{eq:expdef}
+Combining results of Eqs.~\eqref{eq:intderivative1} and \eqref{eq:intderivative2} with adequate rearrangements we obtain the closed form of $Q_j(\theta,\theta_k)$ while discarding the irrelevant constant terms
 \begin{equation}
-\begin{split}E=\sum_{i}^{N}n_{t}\psi_{p}\left(\frac{1}{2}(m+n+p-1)\right)-2\log\Gamma_{p}\left(\frac{1}{2}(n_{t}+p-1)\right)+p\log|\Omega_{t}|^{-1}\\
--n_{t}\log|(T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}+\Sigma|+(n_{t}+p-1)\log |\Sigma_{t}|\\
--(m+n+p-1)\textrm{tr}\left(\left((T_{i}-M)\Omega^{-1}(T_{i}-M)^{\textrm{t}}+\Sigma\right)^{-1}\left((T_{i}-M_{t})\Omega_{t}^{-1}(T_{i}-M_{t})^{\textrm{t}}+\Sigma_{t}\right)\right)
+\begin{split}Q_j(\theta,\theta_k)\sim \nu\psi_{p}\left(\frac{m+\nu_k+p-1}{2}\right)-2\log\Gamma_{p}\left(\frac{\nu+p-1}{2}\right)+p\log|\Omega|^{-1}\\
+-\nu\log|(T_j-M_k)\Omega_k^{-1}(T_j-M_k)^{\textrm{t}}+\Sigma_k|+(\nu+p-1)\log |\Sigma|\\
+-(m+\nu_k+p-1)\textrm{tr}\left[\left((T_j-M_k)\Omega_k^{-1}(T_j-M_k)^{\textrm{t}}+\Sigma_k\right)^{-1}\right.\\
+\left.\left((T_j-M)\Omega^{-1}(T_j-M)^{\textrm{t}}+\Sigma\right)\right].
 \end{split}
 \label{eq:fsimp}
 \end{equation}
