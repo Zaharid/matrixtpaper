@@ -152,23 +152,21 @@ M_{k+1}=\left(\sum_{j\in J}W_j^{(k)}\right)^{-1}\sum_{j\in J}W_j^{(k)}T_j.
 \end{equation}
 Maximizing $Q(\theta,\theta_k)$ with respect to $\Sigma$ we obtain $\Sigma_{k+1}$ in terms of the inverse of the mean of $W_j^{{k}}$
 \begin{equation}
-\Sigma_{k+1}=\frac{\nu+p-1}{\nu_k+m+p-1}\left(\frac{1}{|J|}\sum_{j\in J}W_j^{(k)}\right)^{-1}. 
+\Sigma_{k+1}=\frac{\nu+p-1}{m+\nu_k+p-1}\left(\frac{1}{|J|}\sum_{j\in J}W_j^{(k)}\right)^{-1}. 
 \end{equation}
-Note that $\Sigma_{k+1}$ given above depends on $\nu$.
+Note that $\Sigma_{k+1}$ given above has dependence on $\nu$. Similarly for $\Omega$ we obtain
+\begin{equation}
+\Omega_{k+1}=\frac{m+\nu_k+p-1}{p}\left(\frac{1}{|J|}\sum_{j\in J}(T_j-M_{k+1})^{\textrm{t}}W_j^{(k)}(T_j-M_{k+1})\right).
+\end{equation}
 
-For $\Omega_{k+1}$ we obtain
+For $\nu$ in the case when $\Sigma$ is a free parameter to be estimated we have
 \begin{equation}
-\Omega_{t}=\frac{n+p+m-1}{p}\frac{1}{N}\sum_{i}^{N}(T_{i}-M_{t})W_{i}(T_{i}-M_{t})
-\end{equation}
-and for $n_{t}$, in the case where $\Sigma_{t}$ is a free parameter
-that needs to be estimated, we have:
-\begin{equation}
--p\log(m+n+p-1)+p\log(n_{t}+p-1)+\frac{1}{N}\sum_{i}^{N}\log|W_{i}|-\log\det\left|\frac{1}{N}\sum_{i}^{N}W_{i}\right|+\psi_{p}(\frac{1}{2}(m+n+p-1))-\psi_{p}(\frac{1}{2}(n_{t}+p-1))=0
+p\log\left(\frac{n_{t}+p-1}{m+n+p-1}\right)+\frac{1}{N}\sum_{i}^{N}\log|W_{i}|-\log\left|\frac{1}{N}\sum_{i}^{N}W_{i}\right|+\psi_{p}\left(\frac{m+n+p-1}{2}\right)-\psi_{p}\left(\frac{n_{t}+p-1}{2}\right)=0
 \end{equation}
 otherwise if $\Sigma_{t}=\Sigma$ is fixed and does not depend on
 $n_{t}$:
 \begin{equation}
-\log\det\Sigma_{t}-\log\det\left(\frac{1}{N}\sum_{i}^{N}W_{i}\right)+\psi_{p}(\frac{1}{2}(m+n+p-1))-\psi_{p}(\frac{1}{2}(n_{t}+p-1))=0
+\log|\Sigma_{t}|-\log\det\left(\frac{1}{N}\sum_{i}^{N}W_{i}\right)+\psi_{p}(\frac{1}{2}(m+n+p-1))-\psi_{p}(\frac{1}{2}(n_{t}+p-1))=0
 \end{equation}
 
 \section{Implementation}\label{sec:implement}
