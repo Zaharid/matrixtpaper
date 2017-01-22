@@ -140,7 +140,11 @@ where the matrices $\left\{W_j^{(k)}\right\}_{j\in J}$ are defined as
 \begin{equation}
 W_j^{(k)}:=\left\{\Sigma_k+(T_j-M_k)\Omega_k^{-1}(T_j-M_k)^{\textrm{t}}\right\}^{-1}.
 \end{equation}
-As $\Sigma_k$ and $\Omega_k$ are SPD, each matrix $W_j^{(k)}$ is also SPD. The computation of $W_j^{(k)}$ can be done efficiently using Cholesky factorization via LAPACK routines such as POTRF and POTRS and also the BLAS routines for symmetric matrix update.
+As $\Sigma_k$ and $\Omega_k$ are both SPD, each matrix $W_j^{(k)}$ is also SPD. The computation of $W_j^{(k)}$ can be done efficiently using Cholesky factorization via LAPACK routines and the BLAS routines for symmetric matrix update. When $p$ is much greater than $m$, i.e., the dimension of $\Sigma$ is much larger than $\Omega$, one can apply Sherman--Morrison--Woodbury formulae \citep{doi:10.1137/1023004} to reduce the cost of inverting the $p\times p$ matrix for each $W_j^{(k)}$. Using the formulae $W_j^{(k)}$ can be rewritten in the equivalent form
+\begin{equation}
+W_j^{(k)}=\Sigma_k^{-1}-\Sigma_k^{-1}U_j\left(I_m+U_j^{\textrm{t}}\Sigma_k^{-1}U_j\right)^{-1}U_j^{\textrm{t}}\Sigma_k^{-1}\label{eq:SMW}
+\end{equation}
+with $U_j=(T_j-M_k)\Omega_k^{-1/2}$ and $\Omega_k^{1/2}$ is the upper Cholesky factor of $\Omega_k$. Note that in Eq.~\eqref{eq:SMW} one inverts a $m\times m$ matrix for each $j$ and the inversion (or factorization) of $\Sigma_k$ only needs to be done once.
 
 \subsection{Maximization step}
 
