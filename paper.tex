@@ -38,7 +38,7 @@ Matrix--$t$ distribution is a generalization of multivariate $t$ distribution to
 
 A common approach on estimating the parameters is through the method of maximum likelihood (ML). However, optimizing the likelihood directly is a formidable task as the gradient equations are unwieldy slow to compute and solve. For $t$ distributions, it is well-known that one can exploit the property of scale mixture and apply expectation maximization (EM) technique to optimize the likelihood function \citep{10.2307/24305551}. The same trick can be also applied to matrix--$t$ distribution by viewing it as a matrix-normal distribution with inverse Wishart distributed scale parameter.
 
-This note is organized as follows. In section \ref{sec:matrixt} we give a brief review on matrix--$t$ distributions. The notations and the preliminary results on matrix calculus needed to present the derivation are presented sequentially in the section. EM formulae together with the relevant derivation and implementation details are provided in section \ref{sec:EM} and a brief conclusion is given in section \ref{sec:conclusion}.
+This note is organized as follows. In section \ref{sec:matrixt} we give a brief review on matrix--$t$ distributions. The notations and the preliminary results on matrix calculus needed to present the derivation are presented sequentially in the section. EM formulae together with the relevant derivation and implementation details are provided in section \ref{sec:EM} and a brief final discussion is given in section \ref{sec:discussion}.
 
 \section{Matrix--$t$ distributions}\label{sec:matrixt}
 
@@ -144,7 +144,7 @@ As $\Sigma_k$ and $\Omega_k$ are both SPD, each matrix $W_j^{(k)}$ is also SPD. 
 \begin{equation}
 W_j^{(k)}=\Sigma_k^{-1}-\Sigma_k^{-1}U_j\left(I_m+U_j^{\textrm{t}}\Sigma_k^{-1}U_j\right)^{-1}U_j^{\textrm{t}}\Sigma_k^{-1}\label{eq:SMW}
 \end{equation}
-with $U_j=(T_j-M_k)\Omega_k^{-1/2}$ and $\Omega_k^{1/2}$ is the upper Cholesky factor of $\Omega_k$. Note that in Eq.~\eqref{eq:SMW} one inverts a $m\times m$ matrix for each $j$ and the inversion (or factorization) of $\Sigma_k$ only needs to be done once.
+with $U_j=(T_j-M_k)\Omega_k^{-1/2}$ and $\Omega_k^{1/2}$ is the upper Cholesky factor of $\Omega_k$. Note that in Eq.~\eqref{eq:SMW} one inverts a $m\times m$ matrix for each $j$ and the inversion (or factorization) of $\Sigma_k$ only needs to be done once in each iteration.
 
 \subsection{Maximization step}
 
@@ -166,7 +166,7 @@ For the rest of the parameter(s), we consider two possible situations.
 \begin{equation}
 \Sigma_{k+1}(\nu)=\frac{\nu+p-1}{m+\nu_k+p-1}\left(\bar{W}^{(k)}\right)^{-1},\quad \bar{W}^{(k)}:=\frac{1}{|J|}\sum_{j\in J}W_j^{(k)}\label{eq:Sigma}
 \end{equation}
-$\Sigma_{k+1}$ has linear dependence on $\nu$. Due to this, we substitute $\Sigma_{k+1}$ back into $Q(\theta,\theta_k)$ and maximize it with repect to $\nu$. We remark that
+$\Sigma_{k+1}$ depends linearly on $\nu$. Due to this, we substitute $\Sigma_{k+1}$ back into $Q(\theta,\theta_k)$ and maximize it with repect to $\nu$. We remark that
 \[\tilde{Q}(\nu):=Q\left(\left\{M_{k+1},\Sigma_{k+1}(\nu),\Omega_{k+1},\nu\right\},\theta_k\right)\]
 is a concave function of $\nu$ for all $\nu>0$. The maximum only attains at positive $\nu$ if $\tilde{Q}'(0)$ is positive. For this case we obtain $\nu_{k+1}$ by solving the equation $\tilde{Q}'(\nu)=0$, which has the form
 \begin{equation}
@@ -179,7 +179,15 @@ with $h(x):=p\log(x)-\psi_p(x/2)$.
 \end{equation}
 \end{itemize}
 
-\section{Conclusion}\label{sec:conclusion}
+When $\Omega$ and $\Sigma$ are both unknown, the updating steps given in Eqs.~\eqref{eq:Omega} and \eqref{eq:Sigma} make the likelihood of matrix--$t$ distribution increases monotonically but the parameters $\Omega_k$ and $\Sigma_k$ may not converge as $k$ increases due to the non-identifiability, matrix distributions are defined up to a multiplication constant. This issue has also been mentioned in \citep{2013arXiv1309.6609G} for the estimation of matrix normal distributions. However, instead of fixing a single component in one of the scale matrices, we suggest setting the mean trace ratio
+\begin{equation}
+\frac{\textrm{tr}[\Omega_k]/m}{\textrm{tr}[\Sigma_k]/p}
+\end{equation}
+of $\Omega_k$ and $\Sigma_k$ to 1 with proper scaling at the end of each M-step. This ensures the convergence of the algorithm and also avoids possible numerical issues due to the large scale separation between $\Omega_k$ and $\Sigma_k$ in the iterations.
+
+\subsection{Parameters initialization}
+
+\section{Discussion}\label{sec:discussion}
 
 \section*{Acknowledgement}
 This work is not supported by any grant and has not been presented in any regional or international meetings.
