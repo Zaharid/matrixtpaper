@@ -140,6 +140,7 @@ where the matrices $\left\{W_j^{(k)}\right\}_{j\in J}$ are defined as
 \begin{equation}
 W_j^{(k)}:=\left\{\Sigma_k+(T_j-M_k)\Omega_k^{-1}(T_j-M_k)^{\textrm{t}}\right\}^{-1}.
 \end{equation}
+As $\Sigma_k$ and $\Omega_k$ are SPD, each matrix $W_j^{(k)}$ is also SPD. The computation of $W_j^{(k)}$ can be done efficiently using Cholesky factorization via LAPACK routines such as POTRF and POTRS and also the BLAS routines for symmetric matrix update.
 
 \subsection{Maximization step}
 
