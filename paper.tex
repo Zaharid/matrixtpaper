@@ -92,7 +92,7 @@ where $A$ is a $p\times p$ nonsingular matrix.
 
 Similar as matrix normal distributions, matrix--$t$ distributions are defined up to a multiplicative constant, i.e., $T_{p,m}(M,c\,\Omega,\Sigma/c,\nu)$ has the same distribution as $T_{p,m}(M,\Omega,\Sigma,\nu)$ for any constant $c>0$.
 
-\subsection{EM formulas for matrix--$t$ distribution}
+\subsection{EM formulae for matrix--$t$ distribution}
 
 Given a random variable $X$ with probability distribution with density (or mass) function $p_{\theta}(\cdot)$ with $\theta$ dependence. Assume the density (or mass) function is a marginalization over some unobserved random state $Z$, i.e., $p_{\theta}(x)=\mathbb{E}_{\theta}\left[p_{\theta}(x|Z)\right]$. With observations $\left\{x_i\right\}_{i\in I}$ the classical EM method for MLE consists of two steps:
 
@@ -139,7 +139,7 @@ Utilizing the equalities \eqref{eq:intderivative1} and \eqref{eq:intderivative2}
 \end{equation}
 where the matrices $W_j^{(k)}$ are defined as
 \begin{equation}
-W_j^{(k)}=\left\{\Sigma_k+(T_j-M_k)\Omega_k^{-1}(T_j-M_k)^{\textrm{t}}\right\}^{-1}.
+W_j^{(k)}:=\left\{\Sigma_k+(T_j-M_k)\Omega_k^{-1}(T_j-M_k)^{\textrm{t}}\right\}^{-1}.
 \end{equation}
 
 To maximize $Q(\theta,\theta_k)$ with respect to $\theta$ we compute the gradient of each parameter and equate them to $0$ to obtain $\theta_{k+1}$. For parameter $M$ we have
@@ -150,26 +150,31 @@ As $\Omega$ is nonsingular we obtain $M_{k+1}$ as an average of the input data w
 \begin{equation}
 M_{k+1}=\left(\sum_{j\in J}W_j^{(k)}\right)^{-1}\sum_{j\in J}W_j^{(k)}T_j.
 \end{equation}
-Maximizing $Q(\theta,\theta_k)$ with respect to $\Sigma$ we obtain $\Sigma_{k+1}$ in terms of the inverse of the mean of $W_j^{{k}}$
-\begin{equation}
-\Sigma_{k+1}=\frac{\nu+p-1}{m+\nu_k+p-1}\left(\frac{1}{|J|}\sum_{j\in J}W_j^{(k)}\right)^{-1}. 
-\end{equation}
-Note that $\Sigma_{k+1}$ given above has dependence on $\nu$. Similarly for $\Omega$ we obtain
+Maximizing $Q(\theta,\theta_k)$ with respect to $\Omega$ we obtain $\Omega_{k+1}$
 \begin{equation}
 \Omega_{k+1}=\frac{m+\nu_k+p-1}{p}\left(\frac{1}{|J|}\sum_{j\in J}(T_j-M_{k+1})^{\textrm{t}}W_j^{(k)}(T_j-M_{k+1})\right).
 \end{equation}
-
-For $\nu$ in the case when $\Sigma$ is a free parameter to be estimated we have
+For the rest of the parameter(s), we consider two possible situations.
+\begin{itemize}
+\item $\Sigma$ and $\nu$ are unknown: In this situation, maximizing $Q(\theta,\theta_k)$ with respect to $\Sigma$ we obtain $\Sigma_{k+1}$ in terms of the inverse of the mean of $W_j^{{(k)}}$
 \begin{equation}
-p\log\left(\frac{n_{t}+p-1}{m+n+p-1}\right)+\frac{1}{N}\sum_{i}^{N}\log|W_{i}|-\log\left|\frac{1}{N}\sum_{i}^{N}W_{i}\right|+\psi_{p}\left(\frac{m+n+p-1}{2}\right)-\psi_{p}\left(\frac{n_{t}+p-1}{2}\right)=0
+\Sigma_{k+1}(\nu)=\frac{\nu+p-1}{m+\nu_k+p-1}\left(\bar{W}^{(k)}\right)^{-1},\quad \bar{W}^{(k)}:=\frac{1}{|J|}\sum_{j\in J}W_j^{(k)}\label{eq:sigma}
 \end{equation}
-otherwise if $\Sigma_{t}=\Sigma$ is fixed and does not depend on
-$n_{t}$:
+$\Sigma_{k+1}$ has linear dependence on $\nu$. Due to this, we substitute $\Sigma_{k+1}$ back into $Q(\theta,\theta_k)$ and maximize it with repect to $\nu$. We remark that
+\[\tilde{Q}(\nu):=Q\left(\left\{M_{k+1},\Sigma_{k+1}(\nu),\Omega_{k+1},\nu\right\},\theta_k\right)\]
+is a concave function of $\nu$ for all $\nu>0$. The maximum only attains at positive $\nu$ if $\tilde{Q}'(0)$ is positive. For this case we obtain $\nu_{k+1}$ by solving the equation $\tilde{Q}'(\nu)=0$, which has the form
 \begin{equation}
-\log|\Sigma_{t}|-\log\det\left(\frac{1}{N}\sum_{i}^{N}W_{i}\right)+\psi_{p}(\frac{1}{2}(m+n+p-1))-\psi_{p}(\frac{1}{2}(n_{t}+p-1))=0
+h(\nu+p-1)-h(m+\nu_k+p-1)+\frac{1}{|J|}\sum_{j\in J}\log|W_j^{(k)}|-\log\left|\bar{W}^{(k)}\right|=0
 \end{equation}
+with $h(x):=p\log(x)-\psi_p(x/2)$.
+\item $\Sigma$ is known and $\nu$ is unknown: In this situation, $Q\left(\left\{M_{k+1},\Sigma,\Omega_{k+1},\nu\right\},\theta_k\right)$ is also a concave function of $\nu$. The gradient equation of $\nu$ is given by
+\begin{equation}
+\log|\Sigma|-\log\left|\bar{W}^{(k)}\right|+\psi_{p}\left(\frac{m+\nu_k+p-1}{2}\right)-\psi_{p}\left(\frac{\nu+p-1}{2}\right)=0.
+\end{equation}
+\end{itemize}
 
 \section{Implementation}\label{sec:implement}
+In the actual implementation of 
 
 \section{Conclusion}\label{sec:conclusion}
 
