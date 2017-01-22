@@ -30,15 +30,15 @@
 \maketitle
 
 \begin{abstract}
-We provide an expectation-maximization (EM) formulae for the maximum likelihood estimation of matrix--$t$ distributions and discuss their practical implementation. The result can be applied to problems where the parameters of a matrix--$t$ distribution need to be obtained from data, such as the design of recommendation systems and remote sensing algorithms.
+We provide an expectation-maximization (EM) formulae for the maximum likelihood estimation of matrix--$t$ distributions and discuss its practical implementation. The result can be applied to problems where the parameters of a matrix--$t$ distribution need to be obtained from data, such as the design of recommendation systems and remote sensing algorithms.
 \end{abstract}
 
 \section{Introduction}
-Matrix--$t$ distribution is a generalization of multivariate $t$ distribution to matrix variates situations. Similar as other $t$ distributions, matrix--$t$ distribution is a scale mixture of a particular class of multivariate normal models, matrix normal distributions, except the mixture parameter is a matrix rather than a scalar \citep{gupta1999matrix}. Due to this, the distribution shares the importance in robust estimation and has been applied to many predictive tasks such as spatial interpolation on the prediction of pollution concentration \citep{KIBRIA2006785}, recommendation systems \citep{NIPS2007_3203}, and ... In these problems, it is necessary to obtain the parameters of the distribution, which consist of a degrees of freedom parameter, a matrix location parameter, and two scale matrix parameters, that describe a set of given matrix--valued observations for further inference.
+The matrix--$t$ distribution is a generalization of the multivariate $t$ distribution to matrix variates situations. Similar as other $t$ distributions, matrix--$t$ distribution is a scale mixture of a particular class of multivariate normal models, matrix normal distributions, except the mixture parameter is a matrix rather than a scalar \citep{gupta1999matrix}. Due to this, the distribution shares its importance in robust estimation and has been applied to many predictive tasks such as spatial interpolation on the prediction of pollution concentration \citep{KIBRIA2006785} and recommendation systems \citep{NIPS2007_3203}. In these problems, it is necessary to obtain the parameters of the distribution, which consist of a degrees of freedom parameter, a matrix location parameter, and two scale matrix parameters, that describe a set of given matrix--valued observations for further inference.
 
-A common approach on estimating the parameters is through the method of maximum likelihood (ML). However, optimizing the likelihood directly is a formidable task as the gradient equations are unwieldy slow to compute and solve. For $t$ distributions, it is well-known that one can exploit the property of scale mixture and apply expectation maximization (EM) technique to optimize the likelihood function \citep{10.2307/24305551}. The same trick can be also applied to matrix--$t$ distribution by viewing it as a matrix-normal distribution with inverse Wishart distributed scale parameter.
+A common approach on estimating the parameters is through the method of maximum likelihood (ML). However, optimizing the likelihood directly is a formidable task as the gradient equations are unwieldy slow to compute and solve. For $t$ distributions, it is well-known that one can exploit the property of scale mixture and apply expectation maximization (EM) technique to optimize the likelihood function \citep{10.2307/24305551}. The same technique can be also applied to matrix--$t$ distribution by viewing it a matrix-normal distribution with inverse Wishart distributed scale parameter.
 
-This note is organized as follows. In section \ref{sec:matrixt} we give a brief review on matrix--$t$ distributions. The notations and the preliminary results on matrix calculus needed to present the derivation are presented sequentially in the section. EM formulae together with the relevant derivation and implementation details are provided in section \ref{sec:EM} and a brief final discussion is given in section \ref{sec:discussion}.
+This note is organized as follows. In section \ref{sec:matrixt} we give a brief review on matrix--$t$ distributions. The notations and the preliminary results on matrix calculus needed to present the derivation are presented sequentially in the section. EM formulae together with the relevant derivation and implementation details are provided in section \ref{sec:EM} and a brief conclusion is given in section \ref{sec:conclusion}.
 
 \section{Matrix--$t$ distributions}\label{sec:matrixt}
 
@@ -91,7 +91,7 @@ Similar as matrix normal distributions, matrix--$t$ distributions are defined up
 
 \section{EM formulae for matrix--$t$ distribution}\label{sec:EM}
 
-Given a random variable $X$ with probability distribution with density (or mass) function $p_{\theta}(\cdot)$ with $\theta$ dependence. Assume the density (or mass) function is a marginalization over some unobserved random state $Z$, i.e., $p_{\theta}(x)=\mathbb{E}_{\theta}\left[p_{\theta}(x|Z)\right]$. With observations $\left\{x_i\right\}_{i\in I}$ the classical EM method for MLE consists of two steps:
+Given a random variable $X$ with probability density (or mass) function $p_{\theta}(\cdot)$. Assume the density (or mass) function is a marginalization over some unobserved random state $Z$, i.e., $p_{\theta}(x)=\mathbb{E}_{\theta}\left[p_{\theta}(x|Z)\right]$. With observations $\left\{x_i\right\}_{i\in I}$ the classical EM method for MLE consists of two steps:
 
 \begin{itemize}
 \item At the $k$-th iteration, compute the conditional expectations with respect to $Z$
@@ -108,7 +108,7 @@ Given observed matrix data $\left\{T_j\right\}_{j\in J}$, for each observation $
 \begin{equation}
 Q_j(\theta,\theta_k)=f(T_j;\theta_k)^{-1}\int_{\mathbf{S}_+^p}f(T_{j},S;\theta_k)\log f\left(T_{j},S;\theta\right)\,dS,\label{eq:expdef}
 \end{equation}
-where $\theta=\left\{M,\Sigma,\Omega,\nu\right\}$, $\theta_k=\left\{M_k,\Sigma_k,\Omega_k,\nu_k\right\}$, and $f(T,S;\theta)$ is the full likelihood of the matrix--$t$ distribution with the hidden scale parameter $S$.
+where $\theta=\left\{M,\Sigma,\Omega,\nu\right\}$, $\theta_k=\left\{M_k,\Sigma_k,\Omega_k,\nu_k\right\}$, and $f(T,S;\theta)$ is the full likelihood of the distribution with the hidden scale parameter $S$.
 
 We can split the integral in Eq.~\eqref{eq:expdef} by the terms of $\log f(T_{j},S;\theta)$. Eliminating a global factor $\frac{1}{2}$ and terms which do not depend on the parameters in $\theta$ we have
 \begin{equation}
@@ -121,7 +121,7 @@ The integrals to be computed are
 \int_{\mathbf{S}_+^p}f(T_j,S;\theta_k)\log |S|\,dS, \qquad 
 \int_{\mathbf{S}_+^p}f(T_j,S;\theta_k) S^{-1}\,dS.
 \end{equation}
-They can be done by using the equalities derived by taking the derivative of Eq.~\eqref{eq:intmultgammadef} with respect to $\alpha$ and matrix $A$, respectively,
+They can be done by using equalities derived by taking the derivative of Eq.~\eqref{eq:intmultgammadef} with respect to $\alpha$ and matrix $A$, respectively
 \begin{equation}
 \int_{\mathbf{S}_+^p}e^{-\textrm{tr}\left[SA\right]}|S|^{\alpha}\log |S|\,dS=\Gamma_{p}\left(\alpha+\frac{1+p}{2}\right)|A|^{-\alpha-\frac{1+p}{2}}\left\{\gamma_{p}\left(\alpha+\frac{1+p}{2}\right)-\log |A|\right\},\label{eq:intderivative1}
 \end{equation}
@@ -132,15 +132,15 @@ They can be done by using the equalities derived by taking the derivative of Eq.
 Utilizing the equalities \eqref{eq:intderivative1} and \eqref{eq:intderivative2} with adequate rearrangements we obtain the closed form expression of $Q_j(\theta,\theta_k)$ while ignoring the irrelevant constant terms
 \begin{equation}
 \begin{split}Q_j(\theta,\theta_k) \sim \nu\left\{\log|W_j^{(k)}|+\psi_{p}\left(\frac{m+\nu_k+p-1}{2}\right)\right\}-2\log\Gamma_{p}\left(\frac{\nu+p-1}{2}\right)-p\log|\Omega|\\
--(m+\nu_k+p-1)\textrm{tr}\left[W_j^{(k)}\left\{\Sigma+(T_j-M)\Omega^{-1}(T_j-M)^{\textrm{t}}\right\}\right]+(\nu+p-1)\log |\Sigma|,
+-(m+\nu_k+p-1)\textrm{tr}\left[W_j^{(k)}\left\{\Sigma+(T_j-M)\Omega^{-1}(T_j-M)^{\textrm{t}}\right\}\right]+(\nu+p-1)\log |\Sigma|.
 \end{split}
 \label{eq:fsimp}
 \end{equation}
-where the matrices $\left\{W_j^{(k)}\right\}_{j\in J}$ are defined as
+Here the matrices $\left\{W_j^{(k)}\right\}_{j\in J}$ are defined as
 \begin{equation}
 W_j^{(k)}:=\left\{\Sigma_k+(T_j-M_k)\Omega_k^{-1}(T_j-M_k)^{\textrm{t}}\right\}^{-1}.
 \end{equation}
-As $\Sigma_k$ and $\Omega_k$ are both SPD, each matrix $W_j^{(k)}$ is also SPD. The computation of $W_j^{(k)}$ can be done efficiently using Cholesky factorization via LAPACK routines and the BLAS routines for symmetric matrix update. When $p$ is much greater than $m$, i.e., the dimension of $\Sigma$ is much larger than $\Omega$, one can apply Sherman--Morrison--Woodbury formulae \citep{doi:10.1137/1023004} to reduce the cost of inverting the $p\times p$ matrix for each $W_j^{(k)}$. Using the formulae $W_j^{(k)}$ can be rewritten in the equivalent form
+As $\Sigma_k$ and $\Omega_k$ are both SPD, each matrix $W_j^{(k)}$ is also SPD. The computation of $W_j^{(k)}$ can be done efficiently using Cholesky factorization via LAPACK routines and the BLAS routines for symmetric matrix update. When $p$ is much greater than $m$, i.e., the dimension of $\Sigma$ is much larger than $\Omega$, one can apply Sherman--Morrison--Woodbury formulae \citep{doi:10.1137/1023004} to reduce the cost of inverting the $p\times p$ matrix for each $W_j^{(k)}$. By using the formulae $W_j^{(k)}$ can be rewritten in the equivalent form
 \begin{equation}
 W_j^{(k)}=\Sigma_k^{-1}-\Sigma_k^{-1}U_j\left(I_m+U_j^{\textrm{t}}\Sigma_k^{-1}U_j\right)^{-1}U_j^{\textrm{t}}\Sigma_k^{-1}\label{eq:SMW}
 \end{equation}
@@ -170,24 +170,36 @@ $\Sigma_{k+1}$ depends linearly on $\nu$. Due to this, we substitute $\Sigma_{k+
 \[\tilde{Q}(\nu):=Q\left(\left\{M_{k+1},\Sigma_{k+1}(\nu),\Omega_{k+1},\nu\right\},\theta_k\right)\]
 is a concave function of $\nu$ for all $\nu>0$. The maximum only attains at positive $\nu$ if $\tilde{Q}'(0)$ is positive. For this case we obtain $\nu_{k+1}$ by solving the equation $\tilde{Q}'(\nu)=0$, which has the form
 \begin{equation}
-h(\nu+p-1)-h(m+\nu_k+p-1)+\frac{1}{|J|}\sum_{j\in J}\log|W_j^{(k)}|-\log\left|\bar{W}^{(k)}\right|=0\label{eq:nu1}
+h(\nu+p-1)-h(m+\nu_k+p-1)+\frac{1}{|J|}\sum_{j\in J}\log|W_j^{(k)}|-\log |\bar{W}^{(k)}|=0\label{eq:nu1}
 \end{equation}
 with $h(x):=p\log(x)-\psi_p(x/2)$.
 \item $\Sigma$ is known and $\nu$ is unknown: In this situation, $Q\left(\left\{M_{k+1},\Sigma,\Omega_{k+1},\nu\right\},\theta_k\right)$ is also a concave function of $\nu$. The gradient equation of $\nu$ is given by
 \begin{equation}
-\log|\Sigma|-\log\left|\bar{W}^{(k)}\right|+\psi_{p}\left(\frac{m+\nu_k+p-1}{2}\right)-\psi_{p}\left(\frac{\nu+p-1}{2}\right)=0.\label{eq:nu2}
+\log|\Sigma|-\log |\bar{W}^{(k)}|+\psi_{p}\left(\frac{m+\nu_k+p-1}{2}\right)-\psi_{p}\left(\frac{\nu+p-1}{2}\right)=0.\label{eq:nu2}
 \end{equation}
 \end{itemize}
 
-When $\Omega$ and $\Sigma$ are both unknown, the updating steps given in Eqs.~\eqref{eq:Omega} and \eqref{eq:Sigma} make the likelihood of matrix--$t$ distribution increases monotonically but the parameters $\Omega_k$ and $\Sigma_k$ may not converge as $k$ increases due to the non-identifiability, matrix distributions are defined up to a multiplication constant. This issue has also been mentioned in \citep{2013arXiv1309.6609G} for the estimation of matrix normal distributions. However, instead of fixing a single component in one of the scale matrices, we suggest setting the mean trace ratio
+When $\Omega$ and $\Sigma$ are both unknown, the updating steps given in Eqs.~\eqref{eq:Omega} and \eqref{eq:Sigma} increases the likelihood of matrix--$t$ distribution monotonically but the parameters $\Omega_k$ and $\Sigma_k$ may not converge due to the non-identifiability, matrix distributions are only defined up to a multiplication constant. This issue has also been mentioned in \citep{2013arXiv1309.6609G} for the estimation of matrix normal distributions. However, instead of fixing a single component in one of the scale matrices, we suggest setting the mean trace ratio
 \begin{equation}
 \frac{\textrm{tr}[\Omega_k]/m}{\textrm{tr}[\Sigma_k]/p}
 \end{equation}
-of $\Omega_k$ and $\Sigma_k$ to 1 with proper scaling at the end of each M-step. This ensures the convergence of the algorithm and also avoids possible numerical issues due to the large scale separation between $\Omega_k$ and $\Sigma_k$ in the iterations.
+of $\Omega_k$ and $\Sigma_k$ to 1 with proper scaling at the end of each M-step. This ensures the convergence of the algorithm and also avoids possible numerical issues due to the large scale separation between $\Omega_k$ and $\Sigma_k$ during the iterations.
 
 \subsection{Parameters initialization}
 
-\section{Discussion}\label{sec:discussion}
+For EM method, the choice of the initial values for the parameters has significant effect on the convergence behavior as the algorithm does not guarantee reaching the global optimum. While this is less of an issue for matrix--$t$ distributions as the ML estimation is a convex optimization problem in $\left\{M,\Sigma^{-1},\Omega^{-1},\nu\right\}$, it is still desirable to have an efficient method for selecting good initial values to reduce the number of EM iterations for reaching the required accuracy.
+
+For the location parameter $M$, the component-wise medians and spatial median \citep{Vardi15022000} with distance induced by Frobenius norm
+\begin{equation}
+d(T,T')=\sqrt{\textrm{tr}\left[(T-T')(T-T')^{\textrm{t}}\right]}
+\end{equation}
+are proper choices we found in the implementation and both can be computed with complexity $O(Nmp)$ with $N$ the number of matrices in the given data.
+
+For the rest of the parameters, we center the data by the initial values of $M$ and use the property of low dimensional projection of matrix--$t$ distributions to obtain the initial values. It is known that if $T\sim T_{p,m}(\mathbf{0},\Sigma,\Omega,\nu)$, $Tv$ is multivariate $t$ distributed with scale parameter $\left(\frac{v^{\textrm{t}}\Omega v}{\nu}\right)\Sigma$ and the same degress of freedom parameter $\nu$ for any nonzero $m$ dimensional vector $v$ \citep{gupta1999matrix}. This allows using efficient multivariate $t$ estimation routines for retrieving the initial values.
+
+\section{Conclusion}\label{sec:conclusion}
+
+In this note we derive and provide the EM formulae for MLE of matrix--$t$ distributions. The EM method here mainly consists of computing the weight matrices $\left\{W_j^{(k)}\right\}_{j\in J}$ and we give some guidance on its numerical implementation. A way of choosing the initial values for the parameters is briefly discussed.
 
 \section*{Acknowledgement}
 This work is not supported by any grant and has not been presented in any regional or international meetings.
