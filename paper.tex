@@ -224,29 +224,44 @@ f(T_{j},S;\theta_k)\log f\left(T_{j},S;\theta\right)\,dS%
 \end{equation}
 where $\theta=\left\{M,\Sigma,\Omega,\nu\right\}$,
 $\theta_k=\left\{M_k,\Sigma_k,\Omega_k,\nu_k\right\}$, and
-$f(T,S;\theta)$ is the full likelihood of the distribution with the
-hidden scale parameter $S$.
+$f(T,S;\theta)$ is the full joint likelihood of the distribution with
+the hidden scale parameter $S$.
 
-We can split the integral in Eq.~\eqref{eq:expdef} by the terms of $\log f(T_{j},S;\theta)$. Eliminating a global factor $\frac{1}{2}$ and constant terms which do not depend on the parameters in $\theta$ we have
+We can split the integral in Eq.~\eqref{eq:expdef} by the terms of
+$\log f(T_{j},S;\theta)$. Eliminating a global factor $\frac{1}{2}$
+and constant terms which do not depend on the parameters in $\theta$
+we have
 \begin{equation}
 \begin{split}\log f(T_{j},S;\theta)\sim -\nu\log|S|-\textrm{tr}\left[S^{-1}\left\{\Sigma+(T_j-M)\Omega^{-1}(T_j-M)^{\textrm{t}}\right\}\right]\\
 -\nu p\log2-p\log |\Omega|+(\nu+p-1)\log |\Sigma|-2\log\Gamma_{p}\left(\frac{\nu+p-1}{2}\right).
 \end{split}\label{eq:logf}
 \end{equation}
-The expectation computation requires computing the following two integrals:
+The first two terms in Eq.~\ref{eq:logf} require computing the
+following integrals:
 \begin{equation}
-\int_{\mathbf{S}_{++}^p}f(T_j,S;\theta_k)\log |S|\,dS, \qquad 
+\int_{\mathbf{S}_{++}^p}f(T_j,S;\theta_k)\log |S|\,dS, \qquad
 \int_{\mathbf{S}_{++}^p}f(T_j,S;\theta_k) S^{-1}\,dS.
 \end{equation}
-It can be done by using equalities derived by taking the derivative of Eq.~\eqref{eq:intmultgammadef} with respect to $\alpha$ and matrix $A$, respectively, and this gives
+Note that the trace operation commutes with the matrix integration in
+the for the second term.  The integrals can be computed from
+identities obtained by taking the derivative of
+Eq.~\eqref{eq:intmultgammadef} with respect to $\alpha$ and matrix
+$A$, respectively:
+%
 \begin{equation}
 \int_{\mathbf{S}_{++}^p}e^{-\textrm{tr}\left[SA\right]}|S|^{\alpha}\log |S|\,dS=\Gamma_{p}\left(\alpha+\frac{1+p}{2}\right)|A|^{-\alpha-\frac{1+p}{2}}\left\{\gamma_{p}\left(\alpha+\frac{1+p}{2}\right)-\log |A|\right\},\label{eq:intderivative1}
 \end{equation}
 \begin{equation}
 \int_{\mathbf{S}_{++}^p}e^{-\textrm{tr}\left[SA\right]}|S|^{\alpha}S\,dS=\left(\alpha+\frac{1+p}{2}\right)\Gamma_{p}\left(\alpha+\frac{1+p}{2}\right)|A|^{-\alpha-\frac{1+p}{2}}A^{-1}.\label{eq:intderivative2}
 \end{equation}
+For the rest of the terms in Eq.~\eqref{eq:logf}, the integration over
+$S$ simply cancels out the prefactor.
 
-Utilizing the equalities \eqref{eq:intderivative1} and \eqref{eq:intderivative2} with adequate rearrangements we obtain the closed form expression of $Q_j(\theta,\theta_k)$ while ignoring the irrelevant constant terms
+Thus, using the equalities Eq.~\eqref{eq:intderivative1} and
+Eq.~\eqref{eq:intderivative2}, and after some rearrangements, we
+obtain the closed form expression of $Q_j(\theta,\theta_k)$, where we
+have dropped the irrelevant constant terms
+%
 \begin{equation}
 \begin{split}Q_j(\theta,\theta_k) \sim \nu\left\{\log|W_j^{(k)}|+\psi_{p}\left(\frac{m+\nu_k+p-1}{2}\right)\right\}-2\log\Gamma_{p}\left(\frac{\nu+p-1}{2}\right)-p\log|\Omega|\\
 -(m+\nu_k+p-1)\textrm{tr}\left[W_j^{(k)}\left\{\Sigma+(T_j-M)\Omega^{-1}(T_j-M)^{\textrm{t}}\right\}\right]+(\nu+p-1)\log |\Sigma|.
@@ -257,36 +272,61 @@ Here the matrices $\left\{W_j^{(k)}\right\}_{j\in J}$ are defined as
 \begin{equation}
 W_j^{(k)}:=\left\{\Sigma_k+(T_j-M_k)\Omega_k^{-1}(T_j-M_k)^{\textrm{t}}\right\}^{-1}.
 \end{equation}
+Since $\Sigma_k$ and $\Omega_k$ are both SPD, each matrix $W_j^{(k)}$
+is also SPD.
 
-As $\Sigma_k$ and $\Omega_k$ are both SPD, each matrix $W_j^{(k)}$ is also SPD. The computation of $W_j^{(k)}$ can be done efficiently using Cholesky factorization via LAPACK routines and the BLAS routines for symmetric matrix update. When $p$ is much greater than $m$, i.e., the dimension of $\Sigma$ is much larger than $\Omega$, one can apply Sherman--Morrison--Woodbury formulae \citep{doi:10.1137/1023004} to reduce the cost of inverting the $p\times p$ matrix for each $W_j^{(k)}$. By using the formulae $W_j^{(k)}$ can be rewritten in the following equivalent form
+The main computational challenge in our algorithm is calculating the
+$W_j^{(k)}$ matrices efficiently. We employ Cholesky factorization via
+LAPACK and the BLAS routines for symmetric
+matrix update. When $p$ is much greater than $m$, i.e., the dimension
+of $\Sigma$ is much larger than $\Omega$, one can apply the
+Sherman--Morrison--Woodbury formulae \citep{doi:10.1137/1023004} to
+reduce the cost of inverting the $p\times p$ matrix for each
+$W_j^{(k)}$. By using the formulae $W_j^{(k)}$ can be written as
+%
 \begin{equation}
 W_j^{(k)}=\Sigma_k^{-1}-\Sigma_k^{-1}U_j\left(I_m+U_j^{\textrm{t}}\Sigma_k^{-1}U_j\right)^{-1}U_j^{\textrm{t}}\Sigma_k^{-1}\label{eq:SMW}
 \end{equation}
-with $U_j=(T_j-M_k)\Omega_k^{-1/2}$ and $\Omega_k^{1/2}$ is the upper Cholesky factor of $\Omega_k$. Note that in Eq.~\eqref{eq:SMW} one inverts a $m\times m$ matrix for each $j$ and the inversion (or factorization) of $\Sigma_k$ only needs to be done once in each iteration.
+with $U_j=(T_j-M_k)\Omega_k^{-1/2}$ and $\Omega_k^{1/2}$ is the upper
+Cholesky factor of $\Omega_k$. Note that in Eq.~\eqref{eq:SMW} one
+inverts a $m\times m$ matrix for each $j$ and the inversion (or
+factorization) of $\Sigma_k$ only needs to be done once in each
+iteration.
 
 \subsection{Maximization step}
 
-To maximize $Q(\theta,\theta_k)$ with respect to $\theta$ we compute the gradient of each parameter and equate them to $0$ to obtain $\theta_{k+1}$. For parameter $M$ we have
+To maximize $Q(\theta,\theta_k)$ with respect to $\theta$ we compute
+the gradient of each parameter and equate them to $0$ to obtain
+$\theta_{k+1}$. For parameter $M$ we have
 \begin{equation}
 \sum_{j\in J}W_j^{(k)}\left(T_j-M\right)\Omega^{-1}=0.
 \end{equation}
-As $\Omega$ is nonsingular we obtain $M_{k+1}$ as an average of the input data weighted by $W_j^{(k)}$
+As $\Omega$ is nonsingular we obtain $M_{k+1}$ as an average of the
+input data weighted by $W_j^{(k)}$
 \begin{equation}
 M_{k+1}=\left(\sum_{j\in J}W_j^{(k)}\right)^{-1}\sum_{j\in J}W_j^{(k)}T_j.\label{eq:M}
 \end{equation}
-Maximizing $Q(\theta,\theta_k)$ with respect to $\Omega$ we obtain $\Omega_{k+1}$
+Upon maximizing $Q(\theta,\theta_k)$ with respect to $\Omega$, we obtain
+$\Omega_{k+1}$
 \begin{equation}
 \Omega_{k+1}=\frac{m+\nu_k+p-1}{p}\left(\frac{1}{|J|}\sum_{j\in J}(T_j-M_{k+1})^{\textrm{t}}W_j^{(k)}(T_j-M_{k+1})\right).\label{eq:Omega}
 \end{equation}
 For the rest of the parameter(s), we consider two possible situations.
 \begin{itemize}
-\item $\Sigma$ and $\nu$ are unknown: In this situation, maximizing $Q(\theta,\theta_k)$ with respect to $\Sigma$ we obtain $\Sigma_{k+1}$ in terms of the inverse of the mean of $W_j^{{(k)}}$
+\item $\Sigma$ and $\nu$ are unknown: In this situation, maximizing
+	$Q(\theta,\theta_k)$ with respect to $\Sigma$ we obtain
+	$\Sigma_{k+1}$ in terms of the inverse of the mean of
+	$W_j^{{(k)}}$
 \begin{equation}
 \Sigma_{k+1}(\nu)=\frac{\nu+p-1}{m+\nu_k+p-1}\left(\bar{W}^{(k)}\right)^{-1},\quad \bar{W}^{(k)}:=\frac{1}{|J|}\sum_{j\in J}W_j^{(k)}.\label{eq:Sigma}
 \end{equation}
-$\Sigma_{k+1}$ depends linearly on $\nu$. Due to this, we substitute $\Sigma_{k+1}$ back into $Q(\theta,\theta_k)$ and maximize it with repect to $\nu$. We remark that
+$\Sigma_{k+1}$ depends linearly on $\nu$. Due to this, we substitute
+$\Sigma_{k+1}$ back into $Q(\theta,\theta_k)$ and maximize it with
+respect to $\nu$. We note that
 \[\tilde{Q}(\nu):=Q\left(\left\{M_{k+1},\Sigma_{k+1}(\nu),\Omega_{k+1},\nu\right\},\theta_k\right)\]
-is a concave function of $\nu$ for all $\nu>0$. The maximum only attains at positive $\nu$ if $\tilde{Q}'(0)$ is positive. In this situation we obtain $\nu_{k+1}$ by solving the equation $\tilde{Q}'(\nu)=0$ which has the form
+is a concave function of $\nu$ for all $\nu>0$. In this
+situation we obtain $\nu_{k+1}$ by solving the equation
+$\tilde{Q}'(\nu)=0$ which has the form
 \begin{equation}
 h(\nu+p-1)-h(m+\nu_k+p-1)+\frac{1}{|J|}\sum_{j\in J}\log|W_j^{(k)}|-\log |\bar{W}^{(k)}|=0\label{eq:nu1}
 \end{equation}
@@ -297,32 +337,81 @@ with $h(x):=p\log(x)-\psi_p(x/2)$.
 \end{equation}
 \end{itemize}
 
-When $\Omega$ and $\Sigma$ are both unknown, the updating steps given in Eqs.~\eqref{eq:Omega} and \eqref{eq:Sigma} increases the likelihood of matrix--$t$ distribution monotonically but the parameters $\Omega_k$ and $\Sigma_k$ may not converge due to the non-identifiability of matrix--$t$ mentioned at the end of section \ref{sec:matrixt}. This issue has also been discussed in \citep{2013arXiv1309.6609G} for ML estimation of matrix normal distributions. However, instead of fixing a single component in one of the scale matrices, we suggest setting the mean trace ratio
+When $\Omega$ and $\Sigma$ are both unknown, the updating steps given
+in Eqs.~\eqref{eq:Omega} and \eqref{eq:Sigma} increases the likelihood
+of matrix--$t$ distribution monotonically but the parameters
+$\Omega_k$ and $\Sigma_k$ may not converge due to the
+non-identifiability of matrix--$t$ mentioned at the end of section
+\ref{sec:matrixt}. This issue has also been discussed in
+\citep{2013arXiv1309.6609G} for ML estimation of matrix normal
+distributions. However, instead of fixing a single component in one of
+the scale matrices, we suggest setting the mean trace ratio
 \begin{equation}
 \frac{\textrm{tr}[\Omega_k]/m}{\textrm{tr}[\Sigma_k]/p}
 \end{equation}
-of $\Omega_k$ and $\Sigma_k$ to 1 by proper scaling at the end of each M-step. This ensures the convergence of the algorithm and also avoids possible numerical issues due to the possible large scale separation between $\Omega_k$ and $\Sigma_k$ during the iterations.
+of $\Omega_k$ and $\Sigma_k$ to 1 by proper scaling at the end of each
+M-step. This ensures the convergence of the algorithm and also avoids
+possible numerical issues due to the possible large scale separation
+between $\Omega_k$ and $\Sigma_k$ in the iterative steps.
 
 \subsection{Parameters initialization}
 
-For EM method, the initial values for the parameters has significant effect on the convergence behavior as the algorithm does not guarantee reaching the global optimum. While this is less of an issue for matrix--$t$ distributions as the ML estimation is a convex optimization problem in parameters $\left\{M,\Sigma^{-1},\Omega^{-1},\nu\right\}$, it is still desirable to have an efficient method for selecting good initial values to reduce the number of EM iterations for reaching the required accuracy as the classical log EM is a first order algorithm.
+In the EM method, the initial values of the parameters have
+a significant effect on the convergence behavior, since the algorithm
+does not guarantee reaching the global optimum. This is less of an
+issue for matrix--$t$ distributions because the ML estimation is
+a convex optimization problem in the parameters
+$\left\{M,\Sigma^{-1},\Omega^{-1},\nu\right\}$, but it is still
+desirable to select good initial values to reduce the number of EM
+iterations necessary to reach the required accuracy as the classical
+log EM is a first order algorithm.
 
-For the location parameter $M$, the component-wise medians and spatial median \citep{Vardi15022000} with distance induced by Frobenius norm
+For the location parameter $M$, we found that the component-wise
+median, and spatial
+median \citep{Vardi15022000} with distance induced by Frobenius norm
 \begin{equation}
 d(T,T')=\sqrt{\textrm{tr}\left[(T-T')(T-T')^{\textrm{t}}\right]}
 \end{equation}
-are proper choices we found in the implementation. Both estimators can be computed with time complexity $O(Nmp)$ with $N$ the number of matrices in the given data.
+are good choices. Both estimators can be computed with time complexity
+$O(Nmp)$ with $N=|J|$ the number of matrices in the given data.
 
-For the rest of the parameters, we center the data by the initial values of $M$ and use the property of low dimensional projection of matrix--$t$ distributions to obtain the initial values. It is known that if $T\sim T_{p,m}(\mathbf{0},\Sigma,\Omega,\nu)$, then $Tv$ is multivariate $t$ distributed with scale parameter $\left(\frac{v^{\textrm{t}}\Omega v}{\nu}\right)\Sigma$ and the same degress of freedom parameter $\nu$ for any nonzero $m$ dimensional vector $v$ \citep{gupta1999matrix}. This allows using efficient routines for estimating multivariate $t$ distributions to retrieve the initial values.
+To obtain the rest of initial the parameters, we first center the data
+by the initial values of $M$. We then  use the property of low
+dimensional projection of matrix--$t$ distributions to obtain the
+initial values.  It is known that if $T\sim
+T_{p,m}(\mathbf{0},\Sigma,\Omega,\nu)$, then $Tv$ is a multivariate
+$t$ distributed with scale parameter $\left(\frac{v^{\textrm{t}}\Omega
+v}{\nu}\right)\Sigma$ and the same degrees of freedom parameter $\nu$
+for any nonzero $m$ dimensional vector $v$ \citep{gupta1999matrix}.
+This allows using existing routines for estimating multivariate $t$
+distributions to retrieve the initial values.
 
 \section{Discussion}\label{sec:discussion}
 
-In this paper we derive and provide the EM formulae for ML estimation of matrix--$t$ distributions. The EM algorithm here mainly consists of computing the weight matrices $W_j^{(k)}$ and we provide some guidance on its numerical implementation. A method of choosing the initial values for the parameters in EM is briefly discussed.
+In this paper we derive and provide the EM formulae for ML estimation
+of matrix--$t$ distributions. The EM algorithm here mainly consists of
+computing the weight matrices $W_j^{(k)}$ and we provide some guidance
+on its numerical implementation. A method of choosing the initial
+values for the parameters in EM is briefly discussed.
 
-In principle, the computation burden of estimating matrix--$t$ distributions can be reduced significantly with the EM algorithm discussed here. However, due to the lack of optimized routines which dedicate to linear algebra computations of matrix-valued vector components, the algorithm described here can be difficult to optimize in the actual implementation. Also, scalability with large data can be an issue as the computation involves dense matrix inversion for each observation during the EM iterations. It is possible to alleviate the cost by considering matrix--$t$ distributions with structured scale matrix parameters which allow fast factorization. The EM relations described here can still be applied but with some modifications in the M-step. The application of structured scale matrix parameters in matrix--$t$ inference will be future work.
+In principle, the computation burden of estimating matrix--$t$
+distributions can be reduced significantly with the EM algorithm
+discussed here. However, due to the lack of optimized routines which
+dedicate to linear algebra computations of matrix-valued vector
+components, the algorithm described here can be difficult to optimize
+in the actual implementation. Also, scalability with large data can be
+an issue as the computation involves dense matrix inversion for each
+observation during the EM iterations. It is possible to alleviate the
+cost by considering matrix--$t$ distributions with structured scale
+matrix parameters which allow fast factorization. The EM relations
+described here can still be applied but with some modifications in the
+M-step. The application of structured scale matrix parameters in
+matrix--$t$ inference will be future work.
 
 \section*{Acknowledgement}
-This work is not supported by any grant and has not been presented in any regional or international meetings.
+Z.K. is supported by  the  Executive  Research  Agency  (REA)  of  the
+European Commission under the Grant Agreement PITN-GA-2012-316704
+(HiggsTools).
 
 \bibliographystyle{unsrtnat}
 \bibliography{references}
