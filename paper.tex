@@ -184,29 +184,48 @@ needs to be taken into account in an iterative ML estimation algorithm
 in order to be able to reach convergence.
 
 
-\section{EM formulae for matrix--$t$ distribution}\label{sec:EM}
+\section{EM formulae for the matrix--$t$ distribution}\label{sec:EM}
 
-Given a random variable $X$ with probability density (or mass) function $p_{\theta}(\cdot)$. Assume the density (or mass) function is a marginalization over some unobserved random state $Z$, i.e., $p_{\theta}(x)=\mathbb{E}_{\theta}\left[p_{\theta}(x|Z)\right]$. With observations $\left\{x_i\right\}_{i\in I}$ the classical EM method for ML estimation consists of two steps:
-
+We begin by explaining how the EM method can be used to determine the
+maximum likelihood parameters for some model from a set of
+observations: Consider a random variable $X$ with probability density
+(or mass) function $p_{\theta}(\cdot)$. The EM method applies if the
+density is a marginalization over some unobserved random state $Z$,
+i.e., $p_{\theta}(x)=\mathbb{E}_{\theta}\left[p_{\theta}(x|Z)\right]$.
+Given a set of observations $\left\{x_j\right\}_{j\in J}$, the
+classical EM method for ML estimation consists of two steps:
+%
 \begin{itemize}
-\item At the $k$-th iteration, compute the conditional expectations with respect to $Z$ for each observation $x_i$
-\begin{equation}
+\item At the $k$-th iteration, compute the conditional expectations
+	with respect to $Z$ for each observation $x_j$ \begin{equation}
 Q_i(\theta,\theta_k)=\mathbb{E}_{\theta_k}\left[\log p_{\theta}(x_i,Z)|x_i\right].
 \end{equation}
 
-\item Update $\theta$ by maximizing $Q(\theta,\theta_k):=\sum_{i\in I}Q_i(\theta,\theta_k)$ with respect to $\theta$, i.e.,
+\item Update $\theta$ by maximizing $Q(\theta,\theta_k):=\sum_{j\in J}Q_j(\theta,\theta_k)$ with respect to $\theta$, i.e.,
 \begin{equation}
 \theta_{k+1} = \textrm{argmax}_{\theta}\,Q(\theta,\theta_k).
 \end{equation}
 \end{itemize}
+The algorithm is initialized by providing some initial guess for the
+parameters of interest, $\theta_0$.
+
+We now show how the EM method is applied to matrix--$t$ distributions.
 
 \subsection{Expectation step}
 
-Given observed matrix data $\left\{T_j\right\}_{j\in J}$ for each observation $T_j$ the E-step of the matrix--$t$ distribution entails computing the following integral at step $k$
+Given observed matrix data $\left\{T_j\right\}_{j\in J}$ (with a total
+of $|J|$ observed matrix instances), for each observation $T_j$ the
+conditional expectation at step $k$ is
+%
 \begin{equation}
-Q_j(\theta,\theta_k)=f(T_j;\theta_k)^{-1}\int_{\mathbf{S}_{++}^p}f(T_{j},S;\theta_k)\log f\left(T_{j},S;\theta\right)\,dS,\label{eq:expdef}
+Q_j(\theta,\theta_k)=f(T_j;\theta_k)^{-1}\int_{\mathbf{S}_{++}^p}%
+f(T_{j},S;\theta_k)\log f\left(T_{j},S;\theta\right)\,dS%
+,\label{eq:expdef}
 \end{equation}
-where $\theta=\left\{M,\Sigma,\Omega,\nu\right\}$, $\theta_k=\left\{M_k,\Sigma_k,\Omega_k,\nu_k\right\}$, and $f(T,S;\theta)$ is the full likelihood of the distribution with the hidden scale parameter $S$.
+where $\theta=\left\{M,\Sigma,\Omega,\nu\right\}$,
+$\theta_k=\left\{M_k,\Sigma_k,\Omega_k,\nu_k\right\}$, and
+$f(T,S;\theta)$ is the full likelihood of the distribution with the
+hidden scale parameter $S$.
 
 We can split the integral in Eq.~\eqref{eq:expdef} by the terms of $\log f(T_{j},S;\theta)$. Eliminating a global factor $\frac{1}{2}$ and constant terms which do not depend on the parameters in $\theta$ we have
 \begin{equation}
