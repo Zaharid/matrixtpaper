@@ -30,17 +30,55 @@
 \maketitle
 
 \begin{abstract}
-We provide an expectation-maximization (EM) algorithm for the maximum likelihood estimation of matrix--$t$ distributions and discuss its practical implementation. The result can be applied to problems where the parameters of a matrix--$t$ distribution need to be obtained from data, such as the design of recommendation systems and remote sensing algorithms.
+We provide an expectation-maximization (EM) algorithm for the maximum
+likelihood estimation of matrix--$t$ distributions and discuss its
+practical implementation. The result can be applied to problems where
+the parameters of a matrix--$t$ distribution need to be obtained from
+data, such as the design of recommendation systems and remote sensing
+algorithms.
 \end{abstract}
 
 \section{Introduction}
-The matrix--$t$ distribution is a generalization of the multivariate $t$ distribution to a matrix variate situation. Similar as other $t$ distributions, the matrix--$t$ distribution is a scale mixture of a particular class of multivariate normal models, the matrix normal distribution, except the mixture parameter is a matrix rather than a scalar \citep{gupta1999matrix}. Due to this, the distribution shares its importance in robust estimation and has been applied to many predictive tasks such as spatial interpolation on the prediction of pollution concentration \citep{KIBRIA2006785} and recommendation systems \citep{NIPS2007_3203}.
+The matrix--$t$ distribution is a generalization of the multivariate
+$t$ distribution to matrix variate domains. Similar to other $t$
+distributions, the matrix--$t$ distribution is a scale mixture of
+a particular class of multivariate normal models: In particular, it is
+a mixture of a matrix normal distribution, with a matrix-valued scale
+parameter \citep{gupta1999matrix}.  Because of its mixture nature, the
+matrix--$t$ distribution can be applied to building predictive models
+with applications in tasks such as  spatial interpolation (for
+example, to predict the concentration of pollution
+\citep{KIBRIA2006785}) and recommendation systems
+\citep{NIPS2007_3203}. Matrix models can be advantageous compared to
+more traditional PCA methods because the correlation structure among
+different observations can be captured in the scale matrix parameters,
+and hence do not require the $i.i.d$ assumption
+\citep{2013arXiv1309.6609G}. In such inferential problems, it is
+required to obtain the parameters of the underlying model, given a set
+of observed data samples. For matrix--$t$ distributions, the
+parameters consist of a degrees of freedom parameter, a matrix
+location parameter, and two scale matrix parameters.
 
-These matrix variate models, including matrix normal distributions \citep{2013arXiv1309.6609G}, give better predictive results than the traditional PCA methods as the correlation structure among different observations can be captured in one of the scale matrix parameter and hence do not require the $i.i.d$ assumption. In these inferential problems, it is necessary to obtain the parameters of the underlying model. For matrix--$t$ distributions, the parameters consist of a degrees of freedom parameter, a matrix location parameter, and two scale matrix parameters, which describe a set of given matrix--valued observations for further inference.
+The method of maximum likelihood (ML) is a common approach to estimate
+the parameters of the distribution. However, for matrix--$t$
+distributions, optimizing the likelihood directly is impractical since
+the gradient equations are unwieldy. Instead, we can exploit the fact
+that general for $t$ distributions, it is well-known that one can use
+the mixture property and apply the expectation maximization (EM)
+technique to optimize the likelihood function
+\citep{10.2307/24305551}. EM can also be  applied to the particular
+case of a matrix variate domains, by viewing the matrix--$t$
+distribution as a mixture.
 
-A common approach on estimating the parameters is through the method of maximum likelihood (ML). However, optimizing the likelihood directly is a formidable task as the gradient equations are unwieldy slow to compute and solve. For $t$ distributions, it is well-known that one can exploit the mixture property and apply expectation maximization (EM) technique to optimize the likelihood function \citep{10.2307/24305551}. The same technique can be also applied to the matrix variate situation by viewing it as a matrix-normal distribution with inverse Wishart distributed scale parameter. When missing data presents, imputation of the missing values can be considered as a prediction problem and the relevant work for matrix--$t$ distributions can be found in \cite{NIPS2007_3203}.
+The related problem of determining a sample from a matrix--$t$
+distribution given some observed entries of the matrix and parameters
+of the model was studied in \cite{NIPS2007_3203}.
 
-This paper is organized as follows. In section \ref{sec:matrixt} we give a brief review on matrix--$t$ distributions. Notations and preliminary matrix calculus results needed to present the derivation are presented sequentially in the section. EM formulae together with the relevant derivation and implementation details are provided in section \ref{sec:EM} and a brief discussion is given in section \ref{sec:discussion}.
+This paper is organized as follows: In section \ref{sec:matrixt} we
+give a brief review on matrix--$t$ distributions, fix the notation and
+give some matrix calculus results. In section \ref{sec:EM}, we derive
+the EM formulae and provide relevant implementation details.  A brief
+discussion is given in section \ref{sec:discussion}.
 
 \section{Matrix--$t$ distributions}\label{sec:matrixt}
 
