@@ -137,8 +137,15 @@ $W^{-1}(\Sigma,n)$ with $n>p-1$ is
 at $S$. Here $\Gamma_{p}(\cdot)$ is the multivariate gamma function
 defined in Eq.~\eqref{eq:multgammadef}.
 
-From the definitions in Eqs.~\eqref{eq:tdef1} and \eqref{eq:tdef2},
-and the densities given above, it follows that the density function
+The density of the matrix--$t$ distribution can be obtained by
+computing the joint density of $S$ and $T$ taken as independent
+variables $f\left(T,S; (M,\Sigma,\Omega,\nu)\right)$, as the product
+of the matrix normal and inverse Wishart densities
+Eqs.~\eqref{eq:ndistpdf} and \eqref{eq:wdistpdf}, and then integrating
+the hidden parameter $S$  over the field of SPD matrices, as follows
+from the definitions in Eqs.~\eqref{eq:tdef1} and \eqref{eq:tdef2}.
+
+The density function
 $f(T;\left\{M,\Sigma,\Omega,\nu\right\})$ of a matrix--$t$
 distribution $T_{p,m}(M,\Sigma,\Omega,\nu)$ satisfies
 \begin{equation}
@@ -149,7 +156,9 @@ distribution $T_{p,m}(M,\Sigma,\Omega,\nu)$ satisfies
 \label{eq:matrixtpdf}
 \end{equation}
 %
-with $I_p$ the identity matrix of dimension $p$. The marginalization
+with $I_p$ the identity matrix of dimension $p$.
+
+The marginalization
 over $S$ can be obtained by using the Jacobain determinant of an
 inverse SPD matrix $U=S^{-1}$
 %
@@ -162,7 +171,9 @@ and the integral identity \citep{gupta1999matrix}
 \Gamma_{p}\left(\alpha+\frac{1+p}{2}\right)|A|^{-\alpha-\frac{1+p}{2}}
 \ .\label{eq:intmultgammadef}
 \end{equation}
-Where $A$ is a $p\times p$ nonsingular matrix.
+Where $A$ is a $p\times p$ nonsingular matrix. The result in
+eq.~\eqref{eq:matrixtpdf} then follows by direct substitution.
+
 
 Similar to matrix normal distributions, matrix--$t$ distributions are
 defined up to a multiplicative constant. It is easy to see from the
