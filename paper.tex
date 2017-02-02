@@ -82,52 +82,96 @@ discussion is given in section \ref{sec:discussion}.
 
 \section{Matrix--$t$ distributions}\label{sec:matrixt}
 
-All matrices referred in this paper are real. For notation convenience, the matrix determinant is denoted as $|\cdot|$ and $\mathbf{S}_{++}^p$ is used to indicate the set of symmetric positive definite (SPD) matrices of dimension $p$. The multivariate gamma function $\Gamma_{p}(\cdot)$ given in terms of the standard gamma function $\Gamma(\cdot)$ has the form
+All matrices referred in this paper are real. The matrix determinant
+is denoted as $|\cdot|$. We use the symbol $\mathbf{S}_{++}^p$ to
+indicate the set of symmetric positive definite (SPD) matrices of
+dimension $p$. The multivariate gamma function $\Gamma_{p}(\cdot)$,
+given in terms of the standard gamma function $\Gamma(\cdot)$, is
+%
 \begin{equation}
-\Gamma_{p}(x)=\pi^{p(p-1)/4}\prod_{j=1}^{p}\Gamma\left(x+\frac{1-j}{2}\right).\label{eq:multgammadef}
+\Gamma_{p}(x)=\pi^{p(p-1)/4}\prod_{j=1}^{p}\Gamma\left(x+\frac{1-j}{2}\right)
+\ .\label{eq:multgammadef}
 \end{equation}
+%
 We also define the multivariate digamma function
 %
 \begin{equation}
-\psi_{p}(x):=\frac{d}{dx}\log\Gamma_{p}(x)=\sum_{j=1}^{p}\psi\left(x+\frac{1-j}{2}\right).
+\psi_{p}(x):=\frac{d}{dx}\log\Gamma_{p}(x)=%
+\sum_{j=1}^{p}\psi\left(x+\frac{1-j}{2}\right)\ .
 \end{equation}
 
-A matrix--$t$ distribution $T_{p,m}(M,\Sigma,\Omega,\nu)$ of dimensions $p\times m$ is specified by 4 parameters: the location matrix $M$ of dimensions $p\times m$ , the row and column SPD scale matrices $\Sigma$ and $\Omega$ of dimensions $p\times p$ and $m\times m$, respectively, and the degrees of freedom parameter $\nu>0$. A $p \times m$ random matrix $T$ is said to be matrix--$t$ distributed if given the scale parameter $S$, a SPD matrix of dimensions $p\times p$, the matrix $T$ is matrix normal distributed $N_{p,m}(M,S,\Omega)$ and $S$ is itself inverse Wishart distributed $W^{-1}(\Sigma,\nu +p -1)$:
+A $p
+\times m$ random matrix $T$ is said to be matrix--$t$ distributed if
+given the scale parameter $S$, a SPD matrix of dimensions $p\times p$,
+the matrix $T$ is matrix normal distributed $N_{p,m}(M,S,\Omega)$ and
+$S$ is itself inverse Wishart distributed $W^{-1}(\Sigma,\nu +p -1)$:
+%
 \begin{equation}
-T\,|\,M,\Sigma,\Omega,\nu,S \sim N_{p,m}(M,S,\Omega)\label{eq:tdef1}
+T\,|\,M,\Sigma,\Omega,\nu,S \sim N_{p,m}(M,S,\Omega) \ ,\label{eq:tdef1}
 \end{equation}
 and
 \begin{equation}
-S\,|\,\Sigma,\nu \sim W^{-1}(\Sigma,\nu+p-1).\label{eq:tdef2}
+S\,|\,\Sigma,\nu \sim W^{-1}(\Sigma,\nu+p-1)\ .\label{eq:tdef2}
 \end{equation}
-The matrix normal distribution $N_{p,m}(M,S,\Omega)$ has density
-\begin{equation}
-\frac{1}{(2\pi)^{pm/2}|\Omega|^{p/2}|S|^{m/2}}\exp\left(-\frac{1}{2}\textrm{tr}\left[\Omega^{-1}(X-M)^{\textrm{t}}S^{-1}(X-M)\right]\right)\label{eq:ndistpdf}
-\end{equation}
-at $X$ while the inverse Wishart distribution $W^{-1}(\Sigma,n)$ with $n>p-1$ has density
-\begin{equation}
-\frac{|\Sigma|^{\frac{n}{2}}}{2^{\frac{n p}{2}}|S|^{\frac{n+p+1}{2}}\Gamma_{p}(\frac{n}{2})}\exp\left(-\frac{1}{2}\textrm{tr}\left[\Sigma S^{-1}\right]\right)\label{eq:wdistpdf}
-\end{equation}
-at $S$. Here $\Gamma_{p}(\cdot)$ is the
-multivariate gamma function defined in Eq.~\eqref{eq:multgammadef}.
+%
+Therefore, the matrix--$t$ distribution $T_{p,m}(M,\Sigma,\Omega,\nu)$
+of dimensions $p\times m$ is specified by 4 parameters: the location
+matrix $M$ of dimensions $p\times m$ , the row and column SPD scale
+matrices $\Sigma$ and $\Omega$ of dimensions $p\times p$ and $m\times
+m$, respectively, and the degrees of freedom parameter $\nu>0$.
 
-Follow the definitions in Eqs.~\eqref{eq:tdef1} and \eqref{eq:tdef2} and the densities given above we can see the density function $f(T;\left\{M,\Sigma,\Omega,\nu\right\})$ of a matrix--$t$ distribution $T_{p,m}(M,\Sigma,\Omega,\nu)$ satisfies
+The density of the matrix normal distribution $N_{p,m}(M,S,\Omega)$
 \begin{equation}
-\frac{\Gamma_{p}\left(\frac{p+\nu+m-1}{2}\right)}{\Gamma_{p}\left(\frac{\nu+p-1}{2}\right)\pi^{\frac{mp}{2}}|\Omega|^{\frac{p}{2}}|\Sigma|^{\frac{m}{2}}}
+\frac{1}{(2\pi)^{pm/2}|\Omega|^{p/2}|S|^{m/2}}%
+\exp\left(-\frac{1}{2}\textrm{tr}\left[\Omega^{-1}(X-M)^{\textrm{t}}S^{-1}(X-M)\right]\right)
+\label{eq:ndistpdf}
+\end{equation}
+at $X$,  while the density of the inverse Wishart distribution
+$W^{-1}(\Sigma,n)$ with $n>p-1$ is
+\begin{equation}
+\frac{|\Sigma|^{\frac{n}{2}}}{2^{\frac{n p}{2}}%
+|S|^{\frac{n+p+1}{2}}\Gamma_{p}(\frac{n}{2})}%
+\exp\left(-\frac{1}{2}\textrm{tr}\left[\Sigma S^{-1}\right]\right)
+\label{eq:wdistpdf}
+\end{equation}
+at $S$. Here $\Gamma_{p}(\cdot)$ is the multivariate gamma function
+defined in Eq.~\eqref{eq:multgammadef}.
+
+From the definitions in Eqs.~\eqref{eq:tdef1} and \eqref{eq:tdef2},
+and the densities given above, it follows that the density function
+$f(T;\left\{M,\Sigma,\Omega,\nu\right\})$ of a matrix--$t$
+distribution $T_{p,m}(M,\Sigma,\Omega,\nu)$ satisfies
+\begin{equation}
+\frac{\Gamma_{p}\left(\frac{p+\nu+m-1}{2}\right)}%
+{\Gamma_{p}\left(\frac{\nu+p-1}{2}\right)%
+\pi^{\frac{mp}{2}}|\Omega|^{\frac{p}{2}}|\Sigma|^{\frac{m}{2}}}%
 |I_p+\Sigma^{-1}(T-M)\Omega^{-1}(T-M)^{\textrm{t}}|^{\frac{1-m-p-\nu}{2}}
 \label{eq:matrixtpdf}
 \end{equation}
-with $I_p$ an identity matrix of dimension $p$. The marginalization over $S$ can be obtained by using the Jacobain determinant for inverse SPD matrix $U=S^{-1}$
+%
+with $I_p$ the identity matrix of dimension $p$. The marginalization
+over $S$ can be obtained by using the Jacobain determinant of an
+inverse SPD matrix $U=S^{-1}$
+%
 \begin{equation}
 \left|\frac{\partial U}{\partial S}\right|=|S|^{-p-1}
 \end{equation}
 and the integral identity \citep{gupta1999matrix}
 \begin{equation}
-\int_{\mathbf{S}_{++}^p}e^{-\textrm{tr}[S A]}|S|^{\alpha}\,dS=\Gamma_{p}\left(\alpha+\frac{1+p}{2}\right)|A|^{-\alpha-\frac{1+p}{2}}.\label{eq:intmultgammadef}
+\int_{\mathbf{S}_{++}^p}e^{-\textrm{tr}[S A]}|S|^{\alpha}\,dS=%
+\Gamma_{p}\left(\alpha+\frac{1+p}{2}\right)|A|^{-\alpha-\frac{1+p}{2}}
+\ .\label{eq:intmultgammadef}
 \end{equation}
-Here $A$ is a $p\times p$ nonsingular matrix.
+Where $A$ is a $p\times p$ nonsingular matrix.
 
-Similar as matrix normal distributions, matrix--$t$ distributions are defined up to a multiplicative constant. It is easy to see from the density function \eqref{eq:matrixtpdf} that $T_{p,m}(M,c\,\Omega,\Sigma/c,\nu)$ has the same distribution as $T_{p,m}(M,\Omega,\Sigma,\nu)$ for any constant $c>0$. This property needs to be addressed properly in ML estimation to give a convergence iterative algorithm.
+Similar to matrix normal distributions, matrix--$t$ distributions are
+defined up to a multiplicative constant. It is easy to see from the
+density function \eqref{eq:matrixtpdf} that
+$T_{p,m}(M,c\,\Omega,\Sigma/c,\nu)$ has the same distribution as
+$T_{p,m}(M,\Omega,\Sigma,\nu)$ for any constant $c>0$. This property
+needs to be taken into account in an iterative ML estimation algorithm
+in order to be able to reach convergence.
+
 
 \section{EM formulae for matrix--$t$ distribution}\label{sec:EM}
 
